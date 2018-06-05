@@ -10,3 +10,6 @@ keyPressed - włączanie zegara, zmiana parametru zegara na 20, wprowadzenie ogr
 Maffek()  -  zmiany w orbit
 utworzscene - usunięcie włączania zegara
 Zadanie() - całkowicie zmienione
+
+v0.21
+- Zmiana pozycji kamery
