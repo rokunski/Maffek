@@ -29,6 +29,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
 import javax.media.j3d.*;
+import javax.swing.JButton;
 import javax.swing.Timer;
 import javax.vecmath.AxisAngle4d;
 import javax.vecmath.Color3f;
@@ -58,7 +59,7 @@ public class Maffek extends Applet implements KeyListener{
    RotationInterpolator obracacz5;
    RotationInterpolator obracacz61;
    RotationInterpolator obracacz62;
-   
+    
    float a=0;
   // float aa=0;
    float b=0;
@@ -83,6 +84,8 @@ public class Maffek extends Applet implements KeyListener{
     GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
     Canvas3D canvas3D = new Canvas3D(config);
     SimpleUniverse simpleU = new SimpleUniverse(canvas3D);
+    Vector3f pos_kamery = new Vector3f(0f,0f,5f);
+    Transform3D kamera = new Transform3D();
     
     
     class Zadanie extends TimerTask{
@@ -269,7 +272,7 @@ public class Maffek extends Applet implements KeyListener{
          DirectionalLight swiatlo_kier = new DirectionalLight(kolor_swiatla_kier, kierunek_swiatla_kier1);
          DirectionalLight swiatlo_kier1 = new DirectionalLight(kolor_swiatla_kier, kierunek_swiatla_kier);
          PointLight swiatlo_pnkt = new PointLight(kolor_swiatla_pnkt, new Point3f(2.5f,1.f,1.5f), new Point3f(0.1f,0.1f,.1f));
-         SpotLight swiatlo_sto = new SpotLight(kolor_swiatla_sto, new Point3f(0f, 0f, 0f), new Point3f(0.01f,0.01f,0.01f), new Vector3f(0f, 0f, .0f),1.59f, 1);
+         SpotLight swiatlo_sto = new SpotLight(kolor_swiatla_sto, new Point3f(5f, 2f, 0f), new Point3f(0.01f,0.01f,0.01f), new Vector3f(0f, 0f, .0f),1.59f, 1);
       
          swiatlo_tla.setInfluencingBounds(bounds);
          swiatlo_kier.setInfluencingBounds(bounds);
@@ -648,7 +651,7 @@ public class Maffek extends Applet implements KeyListener{
     
     Maffek(){
         setLayout(new BorderLayout());
-        canvas3D.setPreferredSize(new Dimension(1000,800));
+        canvas3D.setPreferredSize(new Dimension(1280,960));
         canvas3D.addKeyListener(this);
         add(BorderLayout.CENTER,canvas3D);
        
@@ -675,10 +678,9 @@ public class Maffek extends Applet implements KeyListener{
             orbit.setReverseTranslate(true);
             orbit.setMinRadius(1.0);
             orbit.setRotationCenter(new Point3d(0.0f,-0.5f,0.0f));
-            orbit.setRotXFactor(0.4);
-            orbit.setRotYFactor(0.4);
-            orbit.setTransXFactor(0.25);
-            orbit.setTransYFactor(0.25);
+            orbit.setRotFactors(0.4,0.4);
+            orbit.setTransFactors(0.25,0.25);
+            orbit.setZoomFactor(0.25);
             orbit.setSchedulingBounds(bounds);
             viewingPlatform.setViewPlatformBehavior(orbit);	    
 	}        
@@ -686,7 +688,8 @@ public class Maffek extends Applet implements KeyListener{
         // Ensure at least 5 msec per frame (i.e., < 200Hz)
 	simpleU.getViewer().getView().setMinimumFrameCycleTime(5);
         
-        simpleU.getViewingPlatform().setNominalViewingTransform();
+        kamera.set(pos_kamery);
+        simpleU.getViewingPlatform().getViewPlatformTransform().setTransform(kamera);
         simpleU.addBranchGraph(scena);
     }
     
@@ -789,7 +792,8 @@ public class Maffek extends Applet implements KeyListener{
         if(g<-(float)Math.PI/18)g=-(float)Math.PI/18;
          
          if(e.getKeyCode()==KeyEvent.VK_R){
-             simpleU.getViewingPlatform().setNominalViewingTransform();
+              kamera.set(pos_kamery);
+            simpleU.getViewingPlatform().getViewPlatformTransform().setTransform(kamera);
          }
          
          if(e.getKeyCode() == KeyEvent.VK_C){
@@ -817,7 +821,7 @@ public class Maffek extends Applet implements KeyListener{
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        Frame Maffi = new MainFrame(new Maffek(),1000,800);
+        Frame Maffi = new MainFrame(new Maffek(),1280,960);
         
         Maffi.setVisible(true);
     }
