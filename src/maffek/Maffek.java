@@ -17,6 +17,7 @@ import java.util.TimerTask;
 import com.sun.j3d.utils.applet.MainFrame;
 import com.sun.j3d.utils.behaviors.vp.OrbitBehavior;
 import com.sun.j3d.utils.geometry.ColorCube;
+import com.sun.j3d.utils.geometry.Cylinder;
 import com.sun.j3d.utils.geometry.Sphere;
 import com.sun.j3d.utils.image.TextureLoader;
 import com.sun.j3d.utils.universe.PlatformGeometry;
@@ -28,6 +29,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.media.j3d.*;
 import javax.swing.JButton;
 import javax.swing.Timer;
@@ -75,6 +79,12 @@ public class Maffek extends Applet implements KeyListener{
     
     int[] ktory = {0,0,0,0,0,0};
     int kierunek = 0;  //-1,0,1
+    boolean nagrywanie = false, odtwarzanie = false, zatrzask = false ;
+    boolean bylo_nag = false;
+    int czesc[] = new int[10000];
+    float pol[] = new float[10000];
+    int l=0, k=0;
+    
     
      private java.util.Timer       zegar = new java.util.Timer();
      
@@ -89,70 +99,46 @@ public class Maffek extends Applet implements KeyListener{
     
     
     class Zadanie extends TimerTask{
+        @Override
          public void run(){
-            /* if(kierunek ==1 && aa<a) 
-                aa+=0.01f;
-             else if (kierunek ==-1 && aa>a)
-                 aa-=0.01f;
-             else kierunek=0;*/
-             
-           //  obracacz.setMaximumAngle(aa); obracacz.setMinimumAngle(aa);
+             if(!odtwarzanie){
              obracacz.setMaximumAngle(a); obracacz.setMinimumAngle(a);
-             
-       /*      if(kierunek ==1 && bb<b)
-                  bb+=0.01f;
-             else if (kierunek ==-1 && bb>b)
-                 bb-=0.01f;
-             else kierunek=0;
-             
-             obracacz2.setMaximumAngle(bb); obracacz2.setMinimumAngle(bb);*/
-            obracacz2.setMaximumAngle(b); obracacz2.setMinimumAngle(b);
-             
-         /*    if(kierunek ==1 && cc<c)
-                  cc+=0.01f;
-             else if (kierunek ==-1 && cc>c)
-                 cc-=0.01f;
-             else kierunek=0;
-             
-             obracacz3.setMaximumAngle(cc); obracacz3.setMinimumAngle(cc);*/
-         
-         obracacz3.setMaximumAngle(c); obracacz3.setMinimumAngle(c);
-             
-          /*   if(kierunek == 1 && dd<d)
-                  dd+=0.01f;
-             else if (kierunek ==-1 && dd>d)
-                dd-=0.01f;
-            else kierunek=0;
-             
-             obracacz4.setMaximumAngle(dd); obracacz4.setMinimumAngle(dd);*/
+             obracacz2.setMaximumAngle(b); obracacz2.setMinimumAngle(b);
+             obracacz3.setMaximumAngle(c); obracacz3.setMinimumAngle(c);
              obracacz4.setMaximumAngle(d); obracacz4.setMinimumAngle(d);
-             
-           /*  if(kierunek ==1 && ff<f)
-                  ff+=0.01f;
-             else if (kierunek ==-1 && ff>f)
-                 ff-=0.01f;
-            else kierunek=0;
-             
-             obracacz5.setMaximumAngle(ff); obracacz5.setMinimumAngle(ff);*/
-           obracacz5.setMaximumAngle(f); obracacz5.setMinimumAngle(f);
-             
-       /*       if(kierunek ==1 && gg<g)
-                  gg+=0.01f;
-             else if (kierunek ==-1 && gg>g)
-                 gg-=0.01f;
-             else kierunek=0;
-             
-             obracacz61.setMaximumAngle(gg); obracacz61.setMinimumAngle(gg);
-             obracacz62.setMaximumAngle(-gg); obracacz62.setMinimumAngle(-gg);*/
-       
+             obracacz5.setMaximumAngle(f); obracacz5.setMinimumAngle(f);
              obracacz61.setMaximumAngle(g); obracacz61.setMinimumAngle(g);
-             obracacz62.setMaximumAngle(-g); obracacz62.setMinimumAngle(-g);
-             
-      /*       if(kierunek == 0){
-                 zegar.cancel();
-             }*/
-         }
-    }
+             obracacz62.setMaximumAngle(-g); obracacz62.setMinimumAngle(-g); 
+             zegar.cancel();
+             }else{
+                switch(czesc[k]){
+                     case 1:
+                         obracacz.setMaximumAngle(pol[k]); obracacz.setMinimumAngle(pol[k]);break;
+                     case 2:
+                         obracacz2.setMaximumAngle(pol[k]); obracacz2.setMinimumAngle(pol[k]);break;
+                    case 3:
+                         obracacz3.setMaximumAngle(pol[k]); obracacz3.setMinimumAngle(pol[k]);break;
+                     case 4:
+                         obracacz4.setMaximumAngle(pol[k]); obracacz4.setMinimumAngle(pol[k]);break;
+                     case 5:
+                         obracacz5.setMaximumAngle(pol[k]); obracacz5.setMinimumAngle(pol[k]);break;
+                     case 6:
+                         obracacz61.setMaximumAngle(pol[k]); obracacz61.setMinimumAngle(pol[k]);
+                         obracacz62.setMaximumAngle(-pol[k]); obracacz62.setMinimumAngle(-pol[k]);break;
+                 }
+                k++;
+                if(k==l){
+                     odtwarzanie = false;
+                     k=0;
+                     l=0;
+                     bylo_nag = false;
+                     zegar.cancel();
+                }
+            }  
+          }
+     }
+    
+ 
     
     public BranchGroup utworzScene(){
       BranchGroup wezel_scena = new BranchGroup();
@@ -645,6 +631,15 @@ public class Maffek extends Applet implements KeyListener{
       transformacja_62.setTransform(p_szoste2);
       obrot_animacja62.addChild(transformacja_62);
       
+      Appearance  wygladCylindra = new Appearance();
+      wygladCylindra.setColoringAttributes(new ColoringAttributes(0.5f,0.5f,0.9f,ColoringAttributes.NICEST));
+      Cylinder podloze = new Cylinder(2f,0.01f, Cylinder.GENERATE_NORMALS|Cylinder.GENERATE_TEXTURE_COORDS, wygladCylindra);
+      TransformGroup t_podloze = new TransformGroup();
+      Transform3D polozenie_p = new Transform3D();
+      polozenie_p.set(new Vector3f(0f,-0.65f,0f));
+      t_podloze.addChild(podloze);
+      t_podloze.setTransform(polozenie_p);
+      wezel_scena.addChild(t_podloze);
      wezel_scena.addChild(wezel_2);    
       return wezel_scena;
     }
@@ -692,15 +687,9 @@ public class Maffek extends Applet implements KeyListener{
         simpleU.getViewingPlatform().getViewPlatformTransform().setTransform(kamera);
         simpleU.addBranchGraph(scena);
     }
-    
+    @Override
     public void keyPressed(KeyEvent e){
-  /*      aa=a;
-        bb=b;
-        cc=c;
-        dd=d;
-        ff=f;
-        gg=g;*/
-        
+       if(!odtwarzanie){ 
         if(e.getKeyCode()== KeyEvent.VK_1){
             ktory[0]=1;
             for(int i=1;i<6;i++)
@@ -805,15 +794,48 @@ public class Maffek extends Applet implements KeyListener{
              zegar.scheduleAtFixedRate(new Zadanie(),0,20);
          }
          
-        if(e.getKeyCode()== KeyEvent.VK_D ||e.getKeyCode()== KeyEvent.VK_W ||e.getKeyCode()== KeyEvent.VK_S ||e.getKeyCode()== KeyEvent.VK_A  ){
-       
-        zegar = new java.util.Timer();
-        zegar.scheduleAtFixedRate(new Zadanie(),0,20);}
+         if(e.getKeyCode()== KeyEvent.VK_N && !zatrzask){
+             nagrywanie=true;
+             czesc[0] = 1; pol[0]= a;  
+             czesc[1] = 2; pol[1]= b;  
+             czesc[2] = 3; pol[2]= c;  
+             czesc[3] = 4; pol[3]= d;  
+             czesc[4] = 5; pol[4]= f;  
+             czesc[5] = 6; pol[5]= g;
+             l=6;
+             bylo_nag = true;
+             zatrzask = true;
+         }
+         
+         if(nagrywanie){
+            if(ktory[0]==1){czesc[l] = 1; pol[l]= a; l++; }
+            if(ktory[1]==1){czesc[l] = 2; pol[l]= b; l++; }
+            if(ktory[2]==1){czesc[l] = 3; pol[l]= c; l++; }
+            if(ktory[3]==1){czesc[l] = 4; pol[l]= d; l++; }
+            if(ktory[4]==1){czesc[l] = 5; pol[l]= f; l++; }
+            if(ktory[5]==1){czesc[l] = 6; pol[l]= g; l++; }
+         }
+          if(e.getKeyCode()== KeyEvent.VK_D ||e.getKeyCode()== KeyEvent.VK_W ||e.getKeyCode()== KeyEvent.VK_S ||e.getKeyCode()== KeyEvent.VK_A  ){
+            zegar = new java.util.Timer();
+            zegar.scheduleAtFixedRate(new Zadanie(),0,20);}
+       }
+         if(e.getKeyCode()== KeyEvent.VK_O && !zatrzask && bylo_nag){
+             nagrywanie = false;
+             odtwarzanie = true;
+             zatrzask = true;
+             zegar = new java.util.Timer();
+            zegar.scheduleAtFixedRate(new Zadanie(),0,20);
+         }
+         
+         
+
     }
-    
+    @Override
     public void keyReleased(KeyEvent e){
+        if(e.getKeyCode()== KeyEvent.VK_N) zatrzask = false;
+        if(e.getKeyCode()== KeyEvent.VK_O) zatrzask = false;
     }
-    
+    @Override
      public void keyTyped(KeyEvent e){
     }
     /**
@@ -822,8 +844,10 @@ public class Maffek extends Applet implements KeyListener{
     public static void main(String[] args) {
         // TODO code application logic here
         Frame Maffi = new MainFrame(new Maffek(),1280,960);
+        Maffi.setTitle("Pachwina Project");
         
         Maffi.setVisible(true);
+        
     }
     
 }
