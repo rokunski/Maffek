@@ -1,0 +1,3 @@
+keyPressed - włączanie zegara, zmiana parametru zegara na 20, wprowadzenie ograniczeń
+Maffek()  - orbit
+utworzscene - usunięcie włączania zegara
