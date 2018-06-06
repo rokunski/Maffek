@@ -12,41 +12,36 @@ import com.sun.j3d.loaders.objectfile.ObjectFile;
 import java.applet.Applet;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.KeyListener;
 import java.util.TimerTask;
 import com.sun.j3d.utils.applet.MainFrame;
 import com.sun.j3d.utils.behaviors.vp.OrbitBehavior;
-import com.sun.j3d.utils.geometry.ColorCube;
 import com.sun.j3d.utils.geometry.Cylinder;
 import com.sun.j3d.utils.geometry.Sphere;
-import com.sun.j3d.utils.image.TextureLoader;
 import com.sun.j3d.utils.universe.PlatformGeometry;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 import com.sun.j3d.utils.universe.ViewingPlatform;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Frame;
+import java.awt.GraphicsConfiguration;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Enumeration;
+import java.util.Vector;
 import javax.media.j3d.*;
-import javax.swing.JButton;
-import javax.swing.Timer;
 import javax.vecmath.AxisAngle4d;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
-import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
 /**
  *
  * @author ROkuński
  */
-public class Maffek extends Applet implements KeyListener{
+public class Maffek extends Applet implements KeyListener,ActionListener{
     
     BranchGroup scena;
     Alpha alpha_animacja;
@@ -63,32 +58,38 @@ public class Maffek extends Applet implements KeyListener{
    RotationInterpolator obracacz5;
    RotationInterpolator obracacz61;
    RotationInterpolator obracacz62;
+   
+   BranchGroup wezel_scena = new BranchGroup();
+   BranchGroup wezel_2 = new BranchGroup();
+   BranchGroup wezel_3 = new BranchGroup();
+   BranchGroup wezel_4 = new BranchGroup();
+   BranchGroup wezel_5 = new BranchGroup();
+   BranchGroup wezel_6 = new BranchGroup();
+   BranchGroup wezel_7 = new BranchGroup();
+   BranchGroup wezel_8 = new BranchGroup();
     
    float a=0;
-  // float aa=0;
    float b=0;
- //  float bb=0;
    float c=0;
- //  float cc=0;
    float d=0;
- //  float dd=0;
    float f=0;
-  // float ff=0;
    float g=0;
-  // float gg=0;
     
     int[] ktory = {0,0,0,0,0,0};
     int kierunek = 0;  //-1,0,1
     boolean nagrywanie = false, odtwarzanie = false, zatrzask = false ;
     boolean bylo_nag = false;
-    int czesc[] = new int[10000];
-    float pol[] = new float[10000];
+    boolean kolizja= false;
+    boolean chwyc = false;
+    Vector<Integer> czesc = new Vector<>();
+    Vector<Float> pol = new Vector<>();
     int l=0, k=0;
     
-    
+    Klawisze panel = new Klawisze();
+      
      private java.util.Timer       zegar = new java.util.Timer();
      
-     private boolean spin = false;
+     final private boolean spin = false;
      
      
     GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
@@ -96,6 +97,44 @@ public class Maffek extends Applet implements KeyListener{
     SimpleUniverse simpleU = new SimpleUniverse(canvas3D);
     Vector3f pos_kamery = new Vector3f(0f,0f,5f);
     Transform3D kamera = new Transform3D();
+    
+  /*  class Kolizja extends Behavior {
+        TransformGroup targetTG;
+        Shape3D shape;
+        BranchGroup localBGCopy;
+        boolean isWhileCollision;
+        String nazwa;
+        
+       public Kolizja(TransformGroup targetTG, Shape3D shape, BranchGroup localBGCopy, String nazwa){
+            this.targetTG = targetTG;
+            this.shape = shape;
+            this.localBGCopy = localBGCopy;
+            setSchedulingBounds(new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 100.0));
+            isWhileCollision = false;
+            this.nazwa = nazwa;
+        }
+ 
+        @Override
+        public void initialize() {
+            wakeupOn(new WakeupOnCollisionEntry(shape));
+        }
+       
+         @Override
+         public void processStimulus(Enumeration enmrtn) {   
+            if (isWhileCollision){
+                wakeupOn(new WakeupOnCollisionExit(shape));
+                kolizja = false;
+                isWhileCollision = false;
+            }else{
+                wakeupOn(new WakeupOnCollisionEntry(shape));
+                System.out.println("Kolizja z "+ nazwa);  
+                kolizja = true;
+                isWhileCollision = true;
+            }
+    }
+}*/
+
+
     
     
     class Zadanie extends TimerTask{
@@ -111,28 +150,31 @@ public class Maffek extends Applet implements KeyListener{
              obracacz62.setMaximumAngle(-g); obracacz62.setMinimumAngle(-g); 
              zegar.cancel();
              }else{
-                switch(czesc[k]){
+                switch(czesc.get(k)){
                      case 1:
-                         obracacz.setMaximumAngle(pol[k]); obracacz.setMinimumAngle(pol[k]);break;
+                         obracacz.setMaximumAngle(pol.get(k)); obracacz.setMinimumAngle(pol.get(k));break;
                      case 2:
-                         obracacz2.setMaximumAngle(pol[k]); obracacz2.setMinimumAngle(pol[k]);break;
+                         obracacz2.setMaximumAngle(pol.get(k)); obracacz2.setMinimumAngle(pol.get(k));break;
                     case 3:
-                         obracacz3.setMaximumAngle(pol[k]); obracacz3.setMinimumAngle(pol[k]);break;
+                         obracacz3.setMaximumAngle(pol.get(k)); obracacz3.setMinimumAngle(pol.get(k));break;
                      case 4:
-                         obracacz4.setMaximumAngle(pol[k]); obracacz4.setMinimumAngle(pol[k]);break;
+                         obracacz4.setMaximumAngle(pol.get(k)); obracacz4.setMinimumAngle(pol.get(k));break;
                      case 5:
-                         obracacz5.setMaximumAngle(pol[k]); obracacz5.setMinimumAngle(pol[k]);break;
+                         obracacz5.setMaximumAngle(pol.get(k)); obracacz5.setMinimumAngle(pol.get(k));break;
                      case 6:
-                         obracacz61.setMaximumAngle(pol[k]); obracacz61.setMinimumAngle(pol[k]);
-                         obracacz62.setMaximumAngle(-pol[k]); obracacz62.setMinimumAngle(-pol[k]);break;
+                         obracacz61.setMaximumAngle(pol.get(k)); obracacz61.setMinimumAngle(pol.get(k));
+                         obracacz62.setMaximumAngle(-pol.get(k)); obracacz62.setMinimumAngle(-pol.get(k));break;
                  }
                 k++;
                 if(k==l){
                      odtwarzanie = false;
+                     czesc.removeAllElements();
+                     pol.removeAllElements();
                      k=0;
                      l=0;
                      bylo_nag = false;
                      zegar.cancel();
+                     OEnd();
                 }
             }  
           }
@@ -141,14 +183,6 @@ public class Maffek extends Applet implements KeyListener{
  
     
     public BranchGroup utworzScene(){
-      BranchGroup wezel_scena = new BranchGroup();
-      BranchGroup wezel_2 = new BranchGroup();
-      BranchGroup wezel_3 = new BranchGroup();
-      BranchGroup wezel_4 = new BranchGroup();
-      BranchGroup wezel_5 = new BranchGroup();
-      BranchGroup wezel_6 = new BranchGroup();
-      BranchGroup wezel_7 = new BranchGroup();
-
 
       TransformGroup obrot_animacja = new TransformGroup();
       obrot_animacja.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
@@ -235,16 +269,6 @@ public class Maffek extends Applet implements KeyListener{
 
       //ŚWIATŁA
 
-    /*  AmbientLight lightA = new AmbientLight();
-      lightA.setInfluencingBounds(bounds);
-      wezel_scena.addChild(lightA);
-
-      DirectionalLight lightD = new DirectionalLight();
-      lightD.setInfluencingBounds(bounds);
-      lightD.setDirection(new Vector3f(0.0f, 0.0f, -1.0f));
-      lightD.setColor(new Color3f(1.0f, 1.0f, 1.0f));
-      wezel_scena.addChild(lightD);*/
-     
       Color3f kolor_swiatla_tla      = new Color3f(15f, 3.f, 2.0f);
          Color3f kolor_swiatla_kier     = new Color3f(0.8f, 1.1f, 0.3f);
          Color3f kolor_swiatla_pnkt     = new Color3f(1.0f, 1.0f, 1.0f);
@@ -613,7 +637,6 @@ public class Maffek extends Applet implements KeyListener{
           }
       
       }
-      
      catch (FileNotFoundException e) {
 	  System.err.println(e);
 	  System.exit(1);
@@ -626,10 +649,26 @@ public class Maffek extends Applet implements KeyListener{
     catch (IncorrectFormatException e) {
           System.err.println(e);
 	  System.exit(1);
-	}
-
+    }
       transformacja_62.setTransform(p_szoste2);
       obrot_animacja62.addChild(transformacja_62);
+      
+      Sphere kuleczka = new Sphere(0.05f);
+      Appearance wygladKuleczki = new Appearance();
+      wygladKuleczki.setColoringAttributes(new ColoringAttributes(new Color3f(0.0f, 0.3f, 0.5f),1));
+      Material mat = new Material();
+      mat.setAmbientColor(new Color3f(0.3f, 0.2f, 1.0f));
+      wygladKuleczki.setMaterial(mat);
+      kuleczka.setAppearance(wygladKuleczki);
+      Transform3D pos1 = new Transform3D();
+      pos1.setTranslation(new Vector3f(0.3f, -0.6f, 0.0f));
+      TransformGroup kulka = new TransformGroup();
+      kulka.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+      kulka.setTransform(pos1);
+      kulka.addChild(kuleczka);
+      wezel_8.addChild(kulka);
+      wezel_scena.addChild(wezel_8);
+      
       
       Appearance  wygladCylindra = new Appearance();
       wygladCylindra.setColoringAttributes(new ColoringAttributes(0.5f,0.5f,0.9f,ColoringAttributes.NICEST));
@@ -640,6 +679,8 @@ public class Maffek extends Applet implements KeyListener{
       t_podloze.addChild(podloze);
       t_podloze.setTransform(polozenie_p);
       wezel_scena.addChild(t_podloze);
+      
+      
      wezel_scena.addChild(wezel_2);    
       return wezel_scena;
     }
@@ -655,6 +696,22 @@ public class Maffek extends Applet implements KeyListener{
         scena = utworzScene();
 	scena.compile();
         
+        panel.setBackground(Color.DARK_GRAY);  
+        panel.A.addActionListener(this);
+        panel.C.addActionListener(this);
+        panel.D.addActionListener(this);
+        panel.N.addActionListener(this);
+        panel.O.addActionListener(this);
+        panel.R.addActionListener(this);
+        panel.S.addActionListener(this);
+        panel.W.addActionListener(this);
+        panel.cztery.addActionListener(this);
+        panel.dwa.addActionListener(this);
+        panel.jeden.addActionListener(this);
+        panel.piec.addActionListener(this);
+        panel.trzy.addActionListener(this);
+        panel.szesc.addActionListener(this);
+        add("North",panel);
         BoundingSphere bounds = new BoundingSphere(new Point3d(0.0,0.0,0.0), 100.0);
 
 	// add mouse behaviors to the ViewingPlatform
@@ -687,6 +744,205 @@ public class Maffek extends Applet implements KeyListener{
         simpleU.getViewingPlatform().getViewPlatformTransform().setTransform(kamera);
         simpleU.addBranchGraph(scena);
     }
+    
+       
+     private void jedenPressed(){
+         panel.jeden.setBackground(Color.BLUE);
+         panel.dwa.setBackground(new Color(0,153,0));
+         panel.trzy.setBackground(new Color(0,153,0));
+         panel.cztery.setBackground(new Color(0,153,0));
+         panel.piec.setBackground(new Color(0,153,0));
+         panel.szesc.setBackground(new Color(0,153,0));
+         
+         panel.A.setBackground(new Color(0,153,0));
+         panel.D.setBackground(new Color(0,153,0));
+         panel.W.setBackground(Color.RED);
+         panel.S.setBackground(Color.RED);
+         
+         panel.A.setEnabled(true);
+         panel.D.setEnabled(true);
+         panel.S.setEnabled(false);
+         panel.W.setEnabled(false);
+     }
+     
+     private void dwaPressed(){
+         panel.dwa.setBackground(Color.BLUE);
+         panel.jeden.setBackground(new Color(0,153,0));
+         panel.trzy.setBackground(new Color(0,153,0));
+         panel.cztery.setBackground(new Color(0,153,0));
+         panel.piec.setBackground(new Color(0,153,0));
+         panel.szesc.setBackground(new Color(0,153,0));
+         
+         panel.W.setBackground(new Color(0,153,0));
+         panel.S.setBackground(new Color(0,153,0));
+         panel.A.setBackground(Color.RED);
+         panel.D.setBackground(Color.RED);
+         
+         panel.W.setEnabled(true);
+         panel.S.setEnabled(true);
+         panel.A.setEnabled(false);
+         panel.D.setEnabled(false);
+     }
+     
+         private void trzyPressed(){
+         panel.trzy.setBackground(Color.BLUE);
+         panel.jeden.setBackground(new Color(0,153,0));
+         panel.dwa.setBackground(new Color(0,153,0));
+         panel.cztery.setBackground(new Color(0,153,0));
+         panel.piec.setBackground(new Color(0,153,0));
+         panel.szesc.setBackground(new Color(0,153,0));
+         
+         panel.W.setBackground(new Color(0,153,0));
+         panel.S.setBackground(new Color(0,153,0));
+         panel.A.setBackground(Color.RED);
+         panel.D.setBackground(Color.RED);
+         
+         panel.W.setEnabled(true);
+         panel.S.setEnabled(true);
+         panel.A.setEnabled(false);
+         panel.D.setEnabled(false);
+     }
+                
+     private void czteryPressed(){
+         panel.cztery.setBackground(Color.BLUE);
+         panel.dwa.setBackground(new Color(0,153,0));
+         panel.trzy.setBackground(new Color(0,153,0));
+         panel.jeden.setBackground(new Color(0,153,0));
+         panel.piec.setBackground(new Color(0,153,0));
+         panel.szesc.setBackground(new Color(0,153,0));
+         
+         panel.A.setBackground(new Color(0,153,0));
+         panel.D.setBackground(new Color(0,153,0));
+         panel.W.setBackground(Color.RED);
+         panel.S.setBackground(Color.RED);
+         
+         panel.A.setEnabled(true);
+         panel.D.setEnabled(true);
+         panel.S.setEnabled(false);
+         panel.W.setEnabled(false);
+     }
+     
+         private void piecPressed(){
+         panel.piec.setBackground(Color.BLUE);
+         panel.jeden.setBackground(new Color(0,153,0));
+         panel.dwa.setBackground(new Color(0,153,0));
+         panel.cztery.setBackground(new Color(0,153,0));
+         panel.trzy.setBackground(new Color(0,153,0));
+         panel.szesc.setBackground(new Color(0,153,0));
+         
+         panel.W.setBackground(new Color(0,153,0));
+         panel.S.setBackground(new Color(0,153,0));
+         panel.A.setBackground(Color.RED);
+         panel.D.setBackground(Color.RED);
+         
+         panel.W.setEnabled(true);
+         panel.S.setEnabled(true);
+         panel.A.setEnabled(false);
+         panel.D.setEnabled(false);
+     }
+         
+     private void szescPressed(){
+         panel.szesc.setBackground(Color.BLUE);
+         panel.dwa.setBackground(new Color(0,153,0));
+         panel.trzy.setBackground(new Color(0,153,0));
+         panel.jeden.setBackground(new Color(0,153,0));
+         panel.piec.setBackground(new Color(0,153,0));
+         panel.cztery.setBackground(new Color(0,153,0));
+         
+         panel.A.setBackground(new Color(0,153,0));
+         panel.D.setBackground(new Color(0,153,0));
+         panel.W.setBackground(Color.RED);
+         panel.S.setBackground(Color.RED);
+         
+         panel.A.setEnabled(true);
+         panel.D.setEnabled(true);
+         panel.S.setEnabled(false);
+         panel.W.setEnabled(false);
+     }
+     
+     public void CPressed(){
+         panel.jeden.setBackground(new Color(0,153,0));
+         panel.dwa.setBackground(new Color(0,153,0));
+         panel.trzy.setBackground(new Color(0,153,0));
+         panel.jeden.setBackground(new Color(0,153,0));
+         panel.piec.setBackground(new Color(0,153,0));
+         panel.cztery.setBackground(new Color(0,153,0));
+         panel.N.setBackground(new Color(0,153,0));
+         panel.O.setEnabled(false);
+         panel.O.setBackground(Color.RED);
+         
+         panel.W.setBackground(Color.RED);
+         panel.S.setBackground(Color.RED);
+         panel.A.setBackground(Color.RED);
+         panel.D.setBackground(Color.RED);
+         
+         panel.S.setEnabled(false);
+         panel.W.setEnabled(false);
+         panel.A.setEnabled(false);
+         panel.D.setEnabled(false);
+     
+     }
+     
+     public void NPressed(){
+         panel.N.setBackground(Color.BLUE);
+         panel.O.setEnabled(true);
+         panel.O.setBackground(new Color(0,153,0));
+     }
+     
+     public void OPressed(){
+         panel.jeden.setBackground(Color.RED);
+         panel.dwa.setBackground(Color.RED);
+         panel.trzy.setBackground(Color.RED);
+         panel.szesc.setBackground(Color.RED);
+         panel.piec.setBackground(Color.RED);
+         panel.cztery.setBackground(Color.RED);
+         panel.N.setBackground(Color.RED);
+         panel.W.setBackground(Color.RED);
+         panel.S.setBackground(Color.RED);
+         panel.A.setBackground(Color.RED);
+         panel.D.setBackground(Color.RED);
+         panel.C.setBackground(Color.RED);
+         panel.R.setBackground(Color.RED);
+         panel.O.setBackground(Color.BLUE);
+         
+         panel.S.setEnabled(false);
+         panel.W.setEnabled(false);
+         panel.A.setEnabled(false);
+         panel.D.setEnabled(false);
+         panel.jeden.setEnabled(false);
+         panel.dwa.setEnabled(false);
+         panel.trzy.setEnabled(false);
+         panel.cztery.setEnabled(false);
+         panel.piec.setEnabled(false);
+         panel.szesc.setEnabled(false);
+         panel.R.setEnabled(false);
+         panel.C.setEnabled(false);
+         panel.N.setEnabled(false);
+         panel.O.setEnabled(false);
+     }
+     
+     public void OEnd(){
+         panel.jeden.setBackground(new Color(0,153,0));
+         panel.dwa.setBackground(new Color(0,153,0));
+         panel.trzy.setBackground(new Color(0,153,0));
+         panel.szesc.setBackground(new Color(0,153,0));
+         panel.piec.setBackground(new Color(0,153,0));
+         panel.cztery.setBackground(new Color(0,153,0));
+         panel.N.setBackground(new Color(0,153,0));
+         panel.C.setBackground(new Color(0,153,0));
+         panel.R.setBackground(new Color(0,153,0));
+         panel.O.setBackground(Color.RED);
+         
+         panel.jeden.setEnabled(true);
+         panel.dwa.setEnabled(true);
+         panel.trzy.setEnabled(true);
+         panel.cztery.setEnabled(true);
+         panel.piec.setEnabled(true);
+         panel.szesc.setEnabled(true);
+         panel.R.setEnabled(true);
+         panel.C.setEnabled(true);
+         panel.N.setEnabled(true);
+     }
     @Override
     public void keyPressed(KeyEvent e){
        if(!odtwarzanie){ 
@@ -694,92 +950,94 @@ public class Maffek extends Applet implements KeyListener{
             ktory[0]=1;
             for(int i=1;i<6;i++)
                 ktory[i]=0;
+            jedenPressed();
         }
         if(ktory[0]==1 && e.getKeyCode()== KeyEvent.VK_A ){
             a-=0.01f;
-           kierunek = -1;
+            if(nagrywanie){czesc.add(1); pol.add(a); l++;}
          }else if(ktory[0]==1 && e.getKeyCode()== KeyEvent.VK_D ){
-             a+=0.01f;
-             kierunek = 1;
+             a+=0.01f; 
+             if(nagrywanie){czesc.add(1); pol.add(a); l++;}
          }
          
          if(e.getKeyCode()== KeyEvent.VK_2){
             for(int i=0;i<6;i++)
                 ktory[i]=0;
             ktory[1]=1;
+            dwaPressed();
         }
         if(ktory[1]==1 && e.getKeyCode()== KeyEvent.VK_S ){
             b-=0.01f;
-           kierunek = -1;
+            if(b<-(float)Math.PI/5)b=-(float)Math.PI/5;
+            if(nagrywanie){czesc.add(2); pol.add(b); l++;}
          }else  if(ktory[1]==1 && e.getKeyCode()== KeyEvent.VK_W ){
              b+=0.01f;
-             kierunek = 1;
+             if(b>(float)Math.PI/5)b=(float)Math.PI/5;
+             if(nagrywanie){czesc.add(2); pol.add(b); l++;}
          }
          
         if(e.getKeyCode()== KeyEvent.VK_3){
             for(int i=0;i<6;i++)
                 ktory[i]=0;
             ktory[2]=1;
+            trzyPressed();
         }
         if(ktory[2]==1 && e.getKeyCode()== KeyEvent.VK_S ){
             c-=0.01f;
-           kierunek = -1;
+            if(c<-(float)Math.PI/4)c=-(float)Math.PI/4;
+            if(nagrywanie){czesc.add(3); pol.add(c); l++;}
          }else   if(ktory[2]==1 && e.getKeyCode()== KeyEvent.VK_W ){
              c+=0.01f;
-             kierunek = 1;
+             if(c>3*(float)Math.PI/4)c=3*(float)Math.PI/4;
+             if(nagrywanie){czesc.add(3); pol.add(c); l++;}
          }
          
          if(e.getKeyCode()== KeyEvent.VK_4){
             for(int i=0;i<6;i++)
                 ktory[i]=0;
             ktory[3]=1;
+            czteryPressed();
         }
         if(ktory[3]==1 && e.getKeyCode()== KeyEvent.VK_A ){
             d-=0.01f;
-           kierunek = -1;
+            if(nagrywanie){czesc.add(4); pol.add(d); l++;}
          }else  if(ktory[3]==1 && e.getKeyCode()== KeyEvent.VK_D ){
              d+=0.01f;
-             kierunek = 1;
+             if(nagrywanie){czesc.add(4); pol.add(d); l++;}
          }
          
        if(e.getKeyCode()== KeyEvent.VK_5){
             for(int i=0;i<6;i++)
                 ktory[i]=0;
             ktory[4]=1;
+            piecPressed();
         }
         if(ktory[4]==1 && e.getKeyCode()== KeyEvent.VK_S ){
             f-=0.01f;
-           kierunek = -1;
+            if(f<-(float)Math.PI/6)f=-(float)Math.PI/6;
+            if(nagrywanie){czesc.add(5); pol.add(f); l++;}
          }else if(ktory[4]==1 && e.getKeyCode()== KeyEvent.VK_W ){
              f+=0.01f;
-             kierunek = 1;
+             if(f>7*(float)Math.PI/6)f=7*(float)Math.PI/6;
+             if(nagrywanie){czesc.add(5); pol.add(f); l++;}
          }
          
          if(e.getKeyCode()== KeyEvent.VK_6){
             for(int i=0;i<5;i++)
                 ktory[i]=0;
             ktory[5]=1;
+            szescPressed();
         }
         if(ktory[5]==1 && e.getKeyCode()== KeyEvent.VK_A ){
             g-=0.01f;
-           kierunek = -1;
+            if(g<-(float)Math.PI/18)g=-(float)Math.PI/18;
+            if(nagrywanie){czesc.add(6); pol.add(g); l++;}
          }else if(ktory[5]==1 && e.getKeyCode()== KeyEvent.VK_D ){
              g+=0.01f;
-             kierunek = 1;
+             if(g>(float)Math.PI/6)g=(float)Math.PI/6;
+             if(nagrywanie){czesc.add(6); pol.add(g); l++;}
          }
-        
-        if(b>(float)Math.PI/5)b=(float)Math.PI/5;
-        if(b<-(float)Math.PI/5)b=-(float)Math.PI/5;
-        
-        if(c>3*(float)Math.PI/4)c=3*(float)Math.PI/4;
-        if(c<-(float)Math.PI/4)c=-(float)Math.PI/4;
-        
-        if(f>7*(float)Math.PI/6)f=7*(float)Math.PI/6;
-        if(f<-(float)Math.PI/6)f=-(float)Math.PI/6;
-        
-        if(g>(float)Math.PI/6)g=(float)Math.PI/6;
-        if(g<-(float)Math.PI/18)g=-(float)Math.PI/18;
-         
+
          if(e.getKeyCode()==KeyEvent.VK_R){
               kamera.set(pos_kamery);
             simpleU.getViewingPlatform().getViewPlatformTransform().setTransform(kamera);
@@ -792,52 +1050,225 @@ public class Maffek extends Applet implements KeyListener{
              d=0;f=0;g=0;
              zegar = new java.util.Timer();
              zegar.scheduleAtFixedRate(new Zadanie(),0,20);
+             nagrywanie = false;
+             bylo_nag = false;
+             czesc.removeAllElements();
+             pol.removeAllElements();
+             CPressed();
          }
          
-         if(e.getKeyCode()== KeyEvent.VK_N && !zatrzask){
+         if(e.getKeyCode()== KeyEvent.VK_N && !zatrzask && !nagrywanie){
              nagrywanie=true;
-             czesc[0] = 1; pol[0]= a;  
-             czesc[1] = 2; pol[1]= b;  
-             czesc[2] = 3; pol[2]= c;  
-             czesc[3] = 4; pol[3]= d;  
-             czesc[4] = 5; pol[4]= f;  
-             czesc[5] = 6; pol[5]= g;
+             czesc.add(1);pol.add(a);
+             czesc.add(2);pol.add(b);
+             czesc.add(3);pol.add(c);
+             czesc.add(4);pol.add(d);
+             czesc.add(5);pol.add(f);
+             czesc.add(6);pol.add(g);
              l=6;
              bylo_nag = true;
              zatrzask = true;
-         }
-         
-         if(nagrywanie){
-            if(ktory[0]==1){czesc[l] = 1; pol[l]= a; l++; }
-            if(ktory[1]==1){czesc[l] = 2; pol[l]= b; l++; }
-            if(ktory[2]==1){czesc[l] = 3; pol[l]= c; l++; }
-            if(ktory[3]==1){czesc[l] = 4; pol[l]= d; l++; }
-            if(ktory[4]==1){czesc[l] = 5; pol[l]= f; l++; }
-            if(ktory[5]==1){czesc[l] = 6; pol[l]= g; l++; }
+             NPressed();
          }
           if(e.getKeyCode()== KeyEvent.VK_D ||e.getKeyCode()== KeyEvent.VK_W ||e.getKeyCode()== KeyEvent.VK_S ||e.getKeyCode()== KeyEvent.VK_A  ){
             zegar = new java.util.Timer();
-            zegar.scheduleAtFixedRate(new Zadanie(),0,20);}
-       }
-         if(e.getKeyCode()== KeyEvent.VK_O && !zatrzask && bylo_nag){
+            zegar.scheduleAtFixedRate(new Zadanie(),0,20);
+          }
+          
+          if(e.getKeyCode()== KeyEvent.VK_O && !zatrzask && bylo_nag){
              nagrywanie = false;
              odtwarzanie = true;
              zatrzask = true;
+             OPressed();
              zegar = new java.util.Timer();
-            zegar.scheduleAtFixedRate(new Zadanie(),0,20);
+             zegar.scheduleAtFixedRate(new Zadanie(),0,20);
          }
-         
-         
-
+          
+         if(e.getKeyCode()== KeyEvent.VK_ENTER && !zatrzask){
+             chwyc=!chwyc;
+             zatrzask = true;
+           /*   if(chwyc) {
+                 wezel_scena.removeChild(wezel_scena);
+                 wezel_7.addChild(wezel_8);
+                }
+             else 
+                  if(wezel_7.numChildren()==3) {
+                     wezel_7.removeChild(wezel_8);
+                     wezel_scena.addChild(wezel_8);
+             }*/
+         } 
+       }
     }
     @Override
     public void keyReleased(KeyEvent e){
         if(e.getKeyCode()== KeyEvent.VK_N) zatrzask = false;
         if(e.getKeyCode()== KeyEvent.VK_O) zatrzask = false;
+        if(e.getKeyCode()== KeyEvent.VK_ENTER) zatrzask = false;
     }
     @Override
      public void keyTyped(KeyEvent e){
     }
+
+     
+     @Override
+     public void actionPerformed(ActionEvent e){
+     if(!odtwarzanie){ 
+        if(e.getSource()== panel.jeden){
+            ktory[0]=1;
+            for(int i=1;i<6;i++)
+                ktory[i]=0;
+            jedenPressed();
+        }
+        if(ktory[0]==1 && e.getSource()== panel.A ){
+            a-=0.01f;
+            if(nagrywanie){czesc.add(1); pol.add(a); l++;}
+         }else if(ktory[0]==1 && e.getSource()== panel.D){
+             a+=0.01f; 
+             if(nagrywanie){czesc.add(1); pol.add(a); l++;}
+         }
+         
+         if(e.getSource()== panel.dwa){
+            for(int i=0;i<6;i++)
+                ktory[i]=0;
+            ktory[1]=1;
+            dwaPressed();
+        }
+        if(ktory[1]==1 && e.getSource()== panel.S ){
+            b-=0.01f;
+            if(b<-(float)Math.PI/5)b=-(float)Math.PI/5;
+            if(nagrywanie){czesc.add(2); pol.add(b); l++;}
+         }else  if(ktory[1]==1 && e.getSource()== panel.W ){
+             b+=0.01f;
+             if(b>(float)Math.PI/5)b=(float)Math.PI/5;
+             if(nagrywanie){czesc.add(2); pol.add(b); l++;}
+         }
+         
+        if(e.getSource()==panel.trzy){
+            for(int i=0;i<6;i++)
+                ktory[i]=0;
+            ktory[2]=1;
+            trzyPressed();
+        }
+        if(ktory[2]==1 && e.getSource()== panel.S ){
+            c-=0.01f;
+            if(c<-(float)Math.PI/4)c=-(float)Math.PI/4;
+            if(nagrywanie){czesc.add(3); pol.add(c); l++;}
+         }else   if(ktory[2]==1 && e.getSource()== panel.W ){
+             c+=0.01f;
+             if(c>3*(float)Math.PI/4)c=3*(float)Math.PI/4;
+             if(nagrywanie){czesc.add(3); pol.add(c); l++;}
+         }
+         
+         if(e.getSource()== panel.cztery){
+            for(int i=0;i<6;i++)
+                ktory[i]=0;
+            ktory[3]=1;
+            czteryPressed();
+        }
+        if(ktory[3]==1 && e.getSource()== panel.A ){
+            d-=0.01f;
+            if(nagrywanie){czesc.add(4); pol.add(d); l++;}
+         }else  if(ktory[3]==1 && e.getSource()== panel.D ){
+             d+=0.01f;
+             if(nagrywanie){czesc.add(4); pol.add(d); l++;}
+         }
+         
+       if(e.getSource()== panel.piec){
+            for(int i=0;i<6;i++)
+                ktory[i]=0;
+            ktory[4]=1;
+            piecPressed();
+        }
+        if(ktory[4]==1 && e.getSource()== panel.S ){
+            f-=0.01f;
+            if(f<-(float)Math.PI/6)f=-(float)Math.PI/6;
+            if(nagrywanie){czesc.add(5); pol.add(f); l++;}
+         }else if(ktory[4]==1 && e.getSource()== panel.W ){
+             f+=0.01f;
+             if(f>7*(float)Math.PI/6)f=7*(float)Math.PI/6;
+             if(nagrywanie){czesc.add(5); pol.add(f); l++;}
+         }
+         
+         if(e.getSource()== panel.szesc){
+            for(int i=0;i<5;i++)
+                ktory[i]=0;
+            ktory[5]=1;
+            szescPressed();
+        }
+        if(ktory[5]==1 && e.getSource()== panel.A ){
+            g-=0.01f;
+            if(g<-(float)Math.PI/18)g=-(float)Math.PI/18;
+            if(nagrywanie){czesc.add(6); pol.add(g); l++;}
+         }else if(ktory[5]==1 && e.getSource()== panel.D ){
+             g+=0.01f;
+             if(g>(float)Math.PI/6)g=(float)Math.PI/6;
+             if(nagrywanie){czesc.add(6); pol.add(g); l++;}
+         }
+
+         if(e.getSource()==panel.R){
+              kamera.set(pos_kamery);
+            simpleU.getViewingPlatform().getViewPlatformTransform().setTransform(kamera);
+         }
+         
+         if(e.getSource() == panel.C){
+             for(int i=0;i<6;i++)
+                ktory[i]=0;
+             a=0;b=0;c=0;
+             d=0;f=0;g=0;
+             zegar = new java.util.Timer();
+             zegar.scheduleAtFixedRate(new Zadanie(),0,20);
+             nagrywanie = false;
+             bylo_nag = false;
+             czesc.removeAllElements();
+             pol.removeAllElements();
+             CPressed();
+         }
+         
+         if(e.getSource()== panel.N&& !nagrywanie){
+             nagrywanie=true;
+             czesc.add(1);pol.add(a);
+             czesc.add(2);pol.add(b);
+             czesc.add(3);pol.add(c);
+             czesc.add(4);pol.add(d);
+             czesc.add(5);pol.add(f);
+             czesc.add(6);pol.add(g);
+             l=6;
+             bylo_nag = true;
+             NPressed();
+         }
+          if(e.getSource()== panel.D ||e.getSource()== panel.W ||e.getSource()== panel.S ||e.getSource()== panel.A  ){
+            zegar = new java.util.Timer();
+            zegar.scheduleAtFixedRate(new Zadanie(),0,20);
+          }
+          
+          if(e.getSource()== panel.O && bylo_nag){
+             nagrywanie = false;
+             odtwarzanie = true;
+             OPressed();
+             zegar = new java.util.Timer();
+             zegar.scheduleAtFixedRate(new Zadanie(),0,20);
+         }
+          
+       /*  if(e.getSource()== KeyEvent.VK_ENTER && !zatrzask){
+             chwyc=!chwyc;
+             zatrzask = true;*/
+           /*   if(chwyc) {
+                 wezel_scena.removeChild(wezel_scena);
+                 wezel_7.addChild(wezel_8);
+                }
+             else 
+                  if(wezel_7.numChildren()==3) {
+                     wezel_7.removeChild(wezel_8);
+                     wezel_scena.addChild(wezel_8);
+             }*/
+       //  } 
+       }
+     
+     }
+     
+    
+     
+     
     /**
      * @param args the command line arguments
      */
@@ -845,9 +1276,7 @@ public class Maffek extends Applet implements KeyListener{
         // TODO code application logic here
         Frame Maffi = new MainFrame(new Maffek(),1280,960);
         Maffi.setTitle("Pachwina Project");
-        
         Maffi.setVisible(true);
-        
     }
     
 }
