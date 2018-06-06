@@ -1,9 +1,13 @@
 # Maffek
 
-Napiszcie to sprawko :)
 
 
 Changelog
+
+v0.4
+- drobna optymalizacja programu (wektory zamiast tablic przy nagrywaniu ruchu, optymalizacja kodu funkcji KeyPressed())
+- dodana kulka do zabawy (w fazie testów, obecnie nieruchoma)
+- dodany panel pokazujący stan klawiszy
 
 v0.3
 - dodane uczenie
