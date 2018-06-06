@@ -4,6 +4,9 @@
 
 Changelog
 
+v0.41
+- usunięto możliwość sterowania za pomocą przycisków znajdujących się na panelu nad robotem
+
 v0.4
 - drobna optymalizacja programu (wektory zamiast tablic przy nagrywaniu ruchu, optymalizacja kodu funkcji KeyPressed())
 - dodana kulka do zabawy (w fazie testów, obecnie nieruchoma)
