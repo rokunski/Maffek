@@ -55,6 +55,7 @@ public class Klawisze extends javax.swing.JPanel {
         jeden.setForeground(new java.awt.Color(255, 255, 255));
         jeden.setText("1");
         jeden.setToolTipText("");
+        jeden.setEnabled(false);
         jeden.setMaximumSize(new java.awt.Dimension(40, 25));
         jeden.setMinimumSize(new java.awt.Dimension(25, 25));
         jeden.setPreferredSize(new java.awt.Dimension(50, 50));
@@ -64,6 +65,7 @@ public class Klawisze extends javax.swing.JPanel {
         dwa.setForeground(new java.awt.Color(255, 255, 255));
         dwa.setText("2");
         dwa.setToolTipText("");
+        dwa.setEnabled(false);
         dwa.setPreferredSize(new java.awt.Dimension(50, 50));
 
         trzy.setBackground(new java.awt.Color(0, 153, 0));
@@ -71,6 +73,7 @@ public class Klawisze extends javax.swing.JPanel {
         trzy.setForeground(new java.awt.Color(255, 255, 255));
         trzy.setText("3");
         trzy.setToolTipText("");
+        trzy.setEnabled(false);
         trzy.setPreferredSize(new java.awt.Dimension(50, 50));
 
         cztery.setBackground(new java.awt.Color(0, 153, 0));
@@ -78,6 +81,7 @@ public class Klawisze extends javax.swing.JPanel {
         cztery.setForeground(new java.awt.Color(255, 255, 255));
         cztery.setText("4");
         cztery.setToolTipText("");
+        cztery.setEnabled(false);
         cztery.setPreferredSize(new java.awt.Dimension(50, 50));
 
         piec.setBackground(new java.awt.Color(0, 153, 0));
@@ -85,6 +89,7 @@ public class Klawisze extends javax.swing.JPanel {
         piec.setForeground(new java.awt.Color(255, 255, 255));
         piec.setText("5");
         piec.setToolTipText("");
+        piec.setEnabled(false);
         piec.setPreferredSize(new java.awt.Dimension(50, 50));
 
         szesc.setBackground(new java.awt.Color(0, 153, 0));
@@ -92,6 +97,7 @@ public class Klawisze extends javax.swing.JPanel {
         szesc.setForeground(new java.awt.Color(255, 255, 255));
         szesc.setText("6");
         szesc.setToolTipText("");
+        szesc.setEnabled(false);
         szesc.setPreferredSize(new java.awt.Dimension(50, 50));
 
         W.setBackground(new java.awt.Color(255, 0, 0));
@@ -126,18 +132,21 @@ public class Klawisze extends javax.swing.JPanel {
         R.setFont(new java.awt.Font("Impact", 0, 20)); // NOI18N
         R.setForeground(java.awt.Color.white);
         R.setText("R");
+        R.setEnabled(false);
         R.setPreferredSize(new java.awt.Dimension(50, 50));
 
         C.setBackground(new java.awt.Color(0, 153, 0));
         C.setFont(new java.awt.Font("Impact", 0, 20)); // NOI18N
         C.setForeground(java.awt.Color.white);
         C.setText("C");
+        C.setEnabled(false);
         C.setPreferredSize(new java.awt.Dimension(50, 50));
 
         N.setBackground(new java.awt.Color(0, 153, 0));
         N.setFont(new java.awt.Font("Impact", 0, 20)); // NOI18N
         N.setForeground(java.awt.Color.white);
         N.setText("N");
+        N.setEnabled(false);
         N.setPreferredSize(new java.awt.Dimension(50, 50));
 
         O.setBackground(new java.awt.Color(255, 0, 0));
@@ -231,15 +240,15 @@ public class Klawisze extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(18, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(robot_opis)
-                    .addComponent(WSAD_opis))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(WSAD_opis, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(robot_opis))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jeden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(dwa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(trzy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(trzy, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jeden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -261,7 +270,7 @@ public class Klawisze extends javax.swing.JPanel {
                                     .addComponent(O, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(C_opis)
                                     .addComponent(O_opis))))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cztery, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(szesc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(piec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))

@@ -41,7 +41,7 @@ import javax.vecmath.Vector3f;
  *
  * @author ROkuński
  */
-public class Maffek extends Applet implements KeyListener,ActionListener{
+public class Maffek extends Applet implements KeyListener{
     
     BranchGroup scena;
     Alpha alpha_animacja;
@@ -697,7 +697,7 @@ public class Maffek extends Applet implements KeyListener,ActionListener{
 	scena.compile();
         
         panel.setBackground(Color.DARK_GRAY);  
-        panel.A.addActionListener(this);
+      /*  panel.A.addActionListener(this);
         panel.C.addActionListener(this);
         panel.D.addActionListener(this);
         panel.N.addActionListener(this);
@@ -710,7 +710,7 @@ public class Maffek extends Applet implements KeyListener,ActionListener{
         panel.jeden.addActionListener(this);
         panel.piec.addActionListener(this);
         panel.trzy.addActionListener(this);
-        panel.szesc.addActionListener(this);
+        panel.szesc.addActionListener(this);*/
         add("North",panel);
         BoundingSphere bounds = new BoundingSphere(new Point3d(0.0,0.0,0.0), 100.0);
 
@@ -758,11 +758,6 @@ public class Maffek extends Applet implements KeyListener,ActionListener{
          panel.D.setBackground(new Color(0,153,0));
          panel.W.setBackground(Color.RED);
          panel.S.setBackground(Color.RED);
-         
-         panel.A.setEnabled(true);
-         panel.D.setEnabled(true);
-         panel.S.setEnabled(false);
-         panel.W.setEnabled(false);
      }
      
      private void dwaPressed(){
@@ -777,11 +772,6 @@ public class Maffek extends Applet implements KeyListener,ActionListener{
          panel.S.setBackground(new Color(0,153,0));
          panel.A.setBackground(Color.RED);
          panel.D.setBackground(Color.RED);
-         
-         panel.W.setEnabled(true);
-         panel.S.setEnabled(true);
-         panel.A.setEnabled(false);
-         panel.D.setEnabled(false);
      }
      
          private void trzyPressed(){
@@ -796,11 +786,6 @@ public class Maffek extends Applet implements KeyListener,ActionListener{
          panel.S.setBackground(new Color(0,153,0));
          panel.A.setBackground(Color.RED);
          panel.D.setBackground(Color.RED);
-         
-         panel.W.setEnabled(true);
-         panel.S.setEnabled(true);
-         panel.A.setEnabled(false);
-         panel.D.setEnabled(false);
      }
                 
      private void czteryPressed(){
@@ -815,11 +800,6 @@ public class Maffek extends Applet implements KeyListener,ActionListener{
          panel.D.setBackground(new Color(0,153,0));
          panel.W.setBackground(Color.RED);
          panel.S.setBackground(Color.RED);
-         
-         panel.A.setEnabled(true);
-         panel.D.setEnabled(true);
-         panel.S.setEnabled(false);
-         panel.W.setEnabled(false);
      }
      
          private void piecPressed(){
@@ -834,11 +814,6 @@ public class Maffek extends Applet implements KeyListener,ActionListener{
          panel.S.setBackground(new Color(0,153,0));
          panel.A.setBackground(Color.RED);
          panel.D.setBackground(Color.RED);
-         
-         panel.W.setEnabled(true);
-         panel.S.setEnabled(true);
-         panel.A.setEnabled(false);
-         panel.D.setEnabled(false);
      }
          
      private void szescPressed(){
@@ -853,11 +828,6 @@ public class Maffek extends Applet implements KeyListener,ActionListener{
          panel.D.setBackground(new Color(0,153,0));
          panel.W.setBackground(Color.RED);
          panel.S.setBackground(Color.RED);
-         
-         panel.A.setEnabled(true);
-         panel.D.setEnabled(true);
-         panel.S.setEnabled(false);
-         panel.W.setEnabled(false);
      }
      
      public void CPressed(){
@@ -868,24 +838,16 @@ public class Maffek extends Applet implements KeyListener,ActionListener{
          panel.piec.setBackground(new Color(0,153,0));
          panel.cztery.setBackground(new Color(0,153,0));
          panel.N.setBackground(new Color(0,153,0));
-         panel.O.setEnabled(false);
          panel.O.setBackground(Color.RED);
          
          panel.W.setBackground(Color.RED);
          panel.S.setBackground(Color.RED);
          panel.A.setBackground(Color.RED);
-         panel.D.setBackground(Color.RED);
-         
-         panel.S.setEnabled(false);
-         panel.W.setEnabled(false);
-         panel.A.setEnabled(false);
-         panel.D.setEnabled(false);
-     
+         panel.D.setBackground(Color.RED); 
      }
      
      public void NPressed(){
          panel.N.setBackground(Color.BLUE);
-         panel.O.setEnabled(true);
          panel.O.setBackground(new Color(0,153,0));
      }
      
@@ -904,21 +866,6 @@ public class Maffek extends Applet implements KeyListener,ActionListener{
          panel.C.setBackground(Color.RED);
          panel.R.setBackground(Color.RED);
          panel.O.setBackground(Color.BLUE);
-         
-         panel.S.setEnabled(false);
-         panel.W.setEnabled(false);
-         panel.A.setEnabled(false);
-         panel.D.setEnabled(false);
-         panel.jeden.setEnabled(false);
-         panel.dwa.setEnabled(false);
-         panel.trzy.setEnabled(false);
-         panel.cztery.setEnabled(false);
-         panel.piec.setEnabled(false);
-         panel.szesc.setEnabled(false);
-         panel.R.setEnabled(false);
-         panel.C.setEnabled(false);
-         panel.N.setEnabled(false);
-         panel.O.setEnabled(false);
      }
      
      public void OEnd(){
@@ -932,16 +879,6 @@ public class Maffek extends Applet implements KeyListener,ActionListener{
          panel.C.setBackground(new Color(0,153,0));
          panel.R.setBackground(new Color(0,153,0));
          panel.O.setBackground(Color.RED);
-         
-         panel.jeden.setEnabled(true);
-         panel.dwa.setEnabled(true);
-         panel.trzy.setEnabled(true);
-         panel.cztery.setEnabled(true);
-         panel.piec.setEnabled(true);
-         panel.szesc.setEnabled(true);
-         panel.R.setEnabled(true);
-         panel.C.setEnabled(true);
-         panel.N.setEnabled(true);
      }
     @Override
     public void keyPressed(KeyEvent e){
@@ -1109,166 +1046,6 @@ public class Maffek extends Applet implements KeyListener,ActionListener{
      public void keyTyped(KeyEvent e){
     }
 
-     
-     @Override
-     public void actionPerformed(ActionEvent e){
-     if(!odtwarzanie){ 
-        if(e.getSource()== panel.jeden){
-            ktory[0]=1;
-            for(int i=1;i<6;i++)
-                ktory[i]=0;
-            jedenPressed();
-        }
-        if(ktory[0]==1 && e.getSource()== panel.A ){
-            a-=0.01f;
-            if(nagrywanie){czesc.add(1); pol.add(a); l++;}
-         }else if(ktory[0]==1 && e.getSource()== panel.D){
-             a+=0.01f; 
-             if(nagrywanie){czesc.add(1); pol.add(a); l++;}
-         }
-         
-         if(e.getSource()== panel.dwa){
-            for(int i=0;i<6;i++)
-                ktory[i]=0;
-            ktory[1]=1;
-            dwaPressed();
-        }
-        if(ktory[1]==1 && e.getSource()== panel.S ){
-            b-=0.01f;
-            if(b<-(float)Math.PI/5)b=-(float)Math.PI/5;
-            if(nagrywanie){czesc.add(2); pol.add(b); l++;}
-         }else  if(ktory[1]==1 && e.getSource()== panel.W ){
-             b+=0.01f;
-             if(b>(float)Math.PI/5)b=(float)Math.PI/5;
-             if(nagrywanie){czesc.add(2); pol.add(b); l++;}
-         }
-         
-        if(e.getSource()==panel.trzy){
-            for(int i=0;i<6;i++)
-                ktory[i]=0;
-            ktory[2]=1;
-            trzyPressed();
-        }
-        if(ktory[2]==1 && e.getSource()== panel.S ){
-            c-=0.01f;
-            if(c<-(float)Math.PI/4)c=-(float)Math.PI/4;
-            if(nagrywanie){czesc.add(3); pol.add(c); l++;}
-         }else   if(ktory[2]==1 && e.getSource()== panel.W ){
-             c+=0.01f;
-             if(c>3*(float)Math.PI/4)c=3*(float)Math.PI/4;
-             if(nagrywanie){czesc.add(3); pol.add(c); l++;}
-         }
-         
-         if(e.getSource()== panel.cztery){
-            for(int i=0;i<6;i++)
-                ktory[i]=0;
-            ktory[3]=1;
-            czteryPressed();
-        }
-        if(ktory[3]==1 && e.getSource()== panel.A ){
-            d-=0.01f;
-            if(nagrywanie){czesc.add(4); pol.add(d); l++;}
-         }else  if(ktory[3]==1 && e.getSource()== panel.D ){
-             d+=0.01f;
-             if(nagrywanie){czesc.add(4); pol.add(d); l++;}
-         }
-         
-       if(e.getSource()== panel.piec){
-            for(int i=0;i<6;i++)
-                ktory[i]=0;
-            ktory[4]=1;
-            piecPressed();
-        }
-        if(ktory[4]==1 && e.getSource()== panel.S ){
-            f-=0.01f;
-            if(f<-(float)Math.PI/6)f=-(float)Math.PI/6;
-            if(nagrywanie){czesc.add(5); pol.add(f); l++;}
-         }else if(ktory[4]==1 && e.getSource()== panel.W ){
-             f+=0.01f;
-             if(f>7*(float)Math.PI/6)f=7*(float)Math.PI/6;
-             if(nagrywanie){czesc.add(5); pol.add(f); l++;}
-         }
-         
-         if(e.getSource()== panel.szesc){
-            for(int i=0;i<5;i++)
-                ktory[i]=0;
-            ktory[5]=1;
-            szescPressed();
-        }
-        if(ktory[5]==1 && e.getSource()== panel.A ){
-            g-=0.01f;
-            if(g<-(float)Math.PI/18)g=-(float)Math.PI/18;
-            if(nagrywanie){czesc.add(6); pol.add(g); l++;}
-         }else if(ktory[5]==1 && e.getSource()== panel.D ){
-             g+=0.01f;
-             if(g>(float)Math.PI/6)g=(float)Math.PI/6;
-             if(nagrywanie){czesc.add(6); pol.add(g); l++;}
-         }
-
-         if(e.getSource()==panel.R){
-              kamera.set(pos_kamery);
-            simpleU.getViewingPlatform().getViewPlatformTransform().setTransform(kamera);
-         }
-         
-         if(e.getSource() == panel.C){
-             for(int i=0;i<6;i++)
-                ktory[i]=0;
-             a=0;b=0;c=0;
-             d=0;f=0;g=0;
-             zegar = new java.util.Timer();
-             zegar.scheduleAtFixedRate(new Zadanie(),0,20);
-             nagrywanie = false;
-             bylo_nag = false;
-             czesc.removeAllElements();
-             pol.removeAllElements();
-             CPressed();
-         }
-         
-         if(e.getSource()== panel.N&& !nagrywanie){
-             nagrywanie=true;
-             czesc.add(1);pol.add(a);
-             czesc.add(2);pol.add(b);
-             czesc.add(3);pol.add(c);
-             czesc.add(4);pol.add(d);
-             czesc.add(5);pol.add(f);
-             czesc.add(6);pol.add(g);
-             l=6;
-             bylo_nag = true;
-             NPressed();
-         }
-          if(e.getSource()== panel.D ||e.getSource()== panel.W ||e.getSource()== panel.S ||e.getSource()== panel.A  ){
-            zegar = new java.util.Timer();
-            zegar.scheduleAtFixedRate(new Zadanie(),0,20);
-          }
-          
-          if(e.getSource()== panel.O && bylo_nag){
-             nagrywanie = false;
-             odtwarzanie = true;
-             OPressed();
-             zegar = new java.util.Timer();
-             zegar.scheduleAtFixedRate(new Zadanie(),0,20);
-         }
-          
-       /*  if(e.getSource()== KeyEvent.VK_ENTER && !zatrzask){
-             chwyc=!chwyc;
-             zatrzask = true;*/
-           /*   if(chwyc) {
-                 wezel_scena.removeChild(wezel_scena);
-                 wezel_7.addChild(wezel_8);
-                }
-             else 
-                  if(wezel_7.numChildren()==3) {
-                     wezel_7.removeChild(wezel_8);
-                     wezel_scena.addChild(wezel_8);
-             }*/
-       //  } 
-       }
-     
-     }
-     
-    
-     
-     
     /**
      * @param args the command line arguments
      */
