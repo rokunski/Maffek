@@ -15,16 +15,15 @@ import java.awt.Dimension;
 import java.util.TimerTask;
 import com.sun.j3d.utils.applet.MainFrame;
 import com.sun.j3d.utils.behaviors.vp.OrbitBehavior;
-import com.sun.j3d.utils.geometry.Cylinder;
+import com.sun.j3d.utils.geometry.Box;
 import com.sun.j3d.utils.geometry.Sphere;
+import com.sun.j3d.utils.image.TextureLoader;
 import com.sun.j3d.utils.universe.PlatformGeometry;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 import com.sun.j3d.utils.universe.ViewingPlatform;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
@@ -39,7 +38,7 @@ import javax.vecmath.Vector3f;
 
 /**
  *
- * @author ROkuński
+ * @author Maffek, Rokuński, Ksulek
  */
 public class Maffek extends Applet implements KeyListener{
     
@@ -50,6 +49,12 @@ public class Maffek extends Applet implements KeyListener{
     Alpha alpha_animacja4;
     Alpha alpha_animacja5;
     Alpha alpha_animacja6;
+    Alpha alpha_animacja7;
+    Alpha alpha_animacja72;
+    Alpha alpha_animacja73;
+    Alpha alpha_animacja74;
+    Alpha alpha_animacja75;
+    
     
    RotationInterpolator obracacz;
    RotationInterpolator obracacz2;
@@ -58,6 +63,11 @@ public class Maffek extends Applet implements KeyListener{
    RotationInterpolator obracacz5;
    RotationInterpolator obracacz61;
    RotationInterpolator obracacz62;
+   RotationInterpolator obracacz71;
+   RotationInterpolator obracacz72;
+   RotationInterpolator obracacz73;
+   RotationInterpolator obracacz74;
+   RotationInterpolator obracacz75;
    
    BranchGroup wezel_scena = new BranchGroup();
    BranchGroup wezel_2 = new BranchGroup();
@@ -67,13 +77,23 @@ public class Maffek extends Applet implements KeyListener{
    BranchGroup wezel_6 = new BranchGroup();
    BranchGroup wezel_7 = new BranchGroup();
    BranchGroup wezel_8 = new BranchGroup();
-    
+   BranchGroup wezel_82 = new BranchGroup();
+   BranchGroup wezel_83 = new BranchGroup();
+   BranchGroup wezel_84 = new BranchGroup();
+   BranchGroup wezel_85 = new BranchGroup();
+  
    float a=0;
    float b=0;
    float c=0;
    float d=0;
    float f=0;
    float g=0;
+   
+   float ap=0;
+   float bp=0;
+   float cp=0;
+   float dp=0;
+   float fp=0;
     
     int[] ktory = {0,0,0,0,0,0};
     int kierunek = 0;  //-1,0,1
@@ -97,21 +117,26 @@ public class Maffek extends Applet implements KeyListener{
     SimpleUniverse simpleU = new SimpleUniverse(canvas3D);
     Vector3f pos_kamery = new Vector3f(0f,0f,5f);
     Transform3D kamera = new Transform3D();
+    TransformGroup obrot_animacja7;
+    TransformGroup obrot_animacja5;
+    TransformGroup obrot_animacja72;
+    TransformGroup obrot_animacja73;
+    TransformGroup obrot_animacja74;
+    TransformGroup obrot_animacja75;
+    
+    
     
   /*  class Kolizja extends Behavior {
         TransformGroup targetTG;
         Shape3D shape;
         BranchGroup localBGCopy;
-        boolean isWhileCollision;
-        String nazwa;
         
-       public Kolizja(TransformGroup targetTG, Shape3D shape, BranchGroup localBGCopy, String nazwa){
+       public Kolizja(TransformGroup targetTG, Shape3D shape, BranchGroup localBGCopy){
             this.targetTG = targetTG;
             this.shape = shape;
             this.localBGCopy = localBGCopy;
             setSchedulingBounds(new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 100.0));
-            isWhileCollision = false;
-            this.nazwa = nazwa;
+            kolizja = false;
         }
  
         @Override
@@ -148,6 +173,13 @@ public class Maffek extends Applet implements KeyListener{
              obracacz5.setMaximumAngle(f); obracacz5.setMinimumAngle(f);
              obracacz61.setMaximumAngle(g); obracacz61.setMinimumAngle(g);
              obracacz62.setMaximumAngle(-g); obracacz62.setMinimumAngle(-g); 
+             if(chwyc){
+                 obracacz71.setMaximumAngle(a-ap); obracacz71.setMinimumAngle(a-ap);
+                 obracacz72.setMaximumAngle(b-bp); obracacz72.setMinimumAngle(b-bp);
+                 obracacz73.setMaximumAngle(c-cp); obracacz73.setMinimumAngle(c-cp);
+                 obracacz75.setMaximumAngle(f-fp); obracacz75.setMinimumAngle(f-fp);
+                 obracacz74.setMaximumAngle(d-dp); obracacz74.setMinimumAngle(d-dp);
+             }
              zegar.cancel();
              }else{
                 switch(czesc.get(k)){
@@ -179,10 +211,21 @@ public class Maffek extends Applet implements KeyListener{
             }  
           }
      }
-    
+    /**
+     * Tworzy główną scene programu
+     * @return Zwraca wygląd sceny
+     */
  
     
     public BranchGroup utworzScene(){
+     wezel_scena.setCapability(BranchGroup.ALLOW_CHILDREN_WRITE);
+     wezel_scena.setCapability(BranchGroup.ALLOW_CHILDREN_READ);
+     wezel_scena.setCapability(BranchGroup.ALLOW_CHILDREN_EXTEND);
+     wezel_7.setCapability(BranchGroup.ALLOW_CHILDREN_WRITE);
+     wezel_7.setCapability(BranchGroup.ALLOW_CHILDREN_READ);
+     wezel_7.setCapability(BranchGroup.ALLOW_CHILDREN_EXTEND);
+     wezel_8.setCapability(BranchGroup.ALLOW_DETACH);
+     
 
       TransformGroup obrot_animacja = new TransformGroup();
       obrot_animacja.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
@@ -200,7 +243,7 @@ public class Maffek extends Applet implements KeyListener{
       obrot_animacja4.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
       wezel_5.addChild(obrot_animacja4);
       
-      TransformGroup obrot_animacja5 = new TransformGroup();
+      obrot_animacja5 = new TransformGroup();
       obrot_animacja5.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
       wezel_6.addChild(obrot_animacja5);
       
@@ -212,34 +255,69 @@ public class Maffek extends Applet implements KeyListener{
       obrot_animacja62.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
       wezel_7.addChild(obrot_animacja62);
       
+      obrot_animacja7 = new TransformGroup();
+      obrot_animacja7.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+      wezel_8.addChild(obrot_animacja7);
+      
+      obrot_animacja72 = new TransformGroup();
+      obrot_animacja72.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+      wezel_82.addChild(obrot_animacja72);
+      
+       obrot_animacja73 = new TransformGroup();
+      obrot_animacja73.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+      wezel_83.addChild(obrot_animacja73);
+      
+      obrot_animacja74 = new TransformGroup();
+      obrot_animacja74.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+      wezel_84.addChild(obrot_animacja74);
+      
+      obrot_animacja75 = new TransformGroup();
+      obrot_animacja75.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+      wezel_85.addChild(obrot_animacja75);
+      
+      wezel_scena.addChild(wezel_8);
+      obrot_animacja7.addChild(wezel_82);
+      obrot_animacja72.addChild(wezel_83);
+      obrot_animacja73.addChild(wezel_84);
+      obrot_animacja74.addChild(wezel_85);
+      
       alpha_animacja = new Alpha(-1,3000);
       alpha_animacja2 = new Alpha(-1,3000);
       alpha_animacja3 = new Alpha(-1,3000);
       alpha_animacja4 = new Alpha(-1,3000);
       alpha_animacja5 = new Alpha(-1,3000);
       alpha_animacja6 = new Alpha(-1,3000);
+      alpha_animacja7 = new Alpha(-1,3000);
+      alpha_animacja72 = new Alpha(-1,3000);
+      alpha_animacja73 = new Alpha(-1,3000);
+      alpha_animacja74 = new Alpha(-1,3000);
+      alpha_animacja75 = new Alpha(-1,3000);
       
       Transform3D  tmp      = new Transform3D();
 
       
       tmp.set(new Vector3f(0.0f,-0.22f,0.015f));
       obracacz = new RotationInterpolator(alpha_animacja, obrot_animacja,tmp,0,0);
+      obracacz71 = new RotationInterpolator(alpha_animacja7, obrot_animacja7,tmp,0,0);
       
       tmp.set(new Vector3f(0.f,-0.17f,0.0f));
       tmp.setRotation(new AxisAngle4d(0,1,1,Math.PI));
       obracacz2 = new RotationInterpolator(alpha_animacja2, obrot_animacja2,tmp,0,0);
+      obracacz72 = new RotationInterpolator(alpha_animacja72, obrot_animacja72,tmp,0,0);
       
       tmp.set(new Vector3f(0.02f,0.26f,0.02f));
       tmp.setRotation(new AxisAngle4d(0,1,1,Math.PI));
       obracacz3 = new RotationInterpolator(alpha_animacja3, obrot_animacja3,tmp,0,0);
+      obracacz73 = new RotationInterpolator(alpha_animacja73, obrot_animacja73,tmp,0,0);
       
       tmp.set(new Vector3f(0.25f,0.378f,0.02f));
       tmp.setRotation(new AxisAngle4d(1,1,0,Math.PI));
       obracacz4 = new RotationInterpolator(alpha_animacja4, obrot_animacja4,tmp,0,0);
-      
+      obracacz74 = new RotationInterpolator(alpha_animacja74, obrot_animacja74,tmp,0,0);
       tmp.set(new Vector3f(0.775f,0.38f,0.016f));
       tmp.setRotation(new AxisAngle4d(0,1,1,Math.PI));
       obracacz5 = new RotationInterpolator(alpha_animacja5, obrot_animacja5,tmp,0,0);
+      obracacz75 = new RotationInterpolator(alpha_animacja75, obrot_animacja75,tmp,0,0);
       
       tmp.set(new Vector3f(0.76f,0.22f,-0.02f));
       tmp.setRotation(new AxisAngle4d(1,1,0,Math.PI));
@@ -248,8 +326,8 @@ public class Maffek extends Applet implements KeyListener{
       tmp.set(new Vector3f(0.76f,0.22f,0.04f));
       tmp.setRotation(new AxisAngle4d(1,1,0,Math.PI));
       obracacz62 = new RotationInterpolator(alpha_animacja6, obrot_animacja62,tmp,0,0);
-      
-      BoundingSphere bounds = new BoundingSphere();
+  
+      BoundingSphere bounds = new BoundingSphere(new Point3d(0, 0,0 ), 10);
       
       obracacz.setSchedulingBounds(bounds);
       obrot_animacja.addChild(obracacz);
@@ -265,34 +343,49 @@ public class Maffek extends Applet implements KeyListener{
       obrot_animacja61.addChild(obracacz61);
       obracacz62.setSchedulingBounds(bounds);
       obrot_animacja62.addChild(obracacz62);
+      obracacz71.setSchedulingBounds(bounds);
+      obrot_animacja7.addChild(obracacz71);
+      obracacz72.setSchedulingBounds(bounds);
+      obrot_animacja72.addChild(obracacz72);
+      obracacz73.setSchedulingBounds(bounds);
+      obrot_animacja73.addChild(obracacz73);
+      obracacz74.setSchedulingBounds(bounds);
+      obrot_animacja74.addChild(obracacz74);
+      obracacz75.setSchedulingBounds(bounds);
+      obrot_animacja75.addChild(obracacz75);
+      
       
 
       //ŚWIATŁA
 
-      Color3f kolor_swiatla_tla      = new Color3f(15f, 3.f, 2.0f);
-         Color3f kolor_swiatla_kier     = new Color3f(0.8f, 1.1f, 0.3f);
+      Color3f kolor_swiatla_tla      = new Color3f(1f, 1.f, 1.0f);
+         Color3f kolor_swiatla_kier     = new Color3f(1.0f, 1.0f, 1.0f);
          Color3f kolor_swiatla_pnkt     = new Color3f(1.0f, 1.0f, 1.0f);
-         Color3f kolor_swiatla_sto      = new Color3f(3.0f, 1.0f, 5f);
+         Color3f kolor_swiatla_sto      = new Color3f(1.0f, 1.0f, 1f);
 
-         Vector3f kierunek_swiatla_kier = new Vector3f(1f, 6f, 1f);
-         Vector3f kierunek_swiatla_kier1 = new Vector3f(3f, 6f, 1f);
+         Vector3f kierunek_swiatla_kier = new Vector3f(1f, -2f, 1f);
+         Vector3f kierunek_swiatla_kier1 = new Vector3f(1f, -2f, 1f);
 
          AmbientLight swiatlo_tla = new AmbientLight(kolor_swiatla_tla);
          AmbientLight swiatlo_tla1 = new AmbientLight(kolor_swiatla_tla);
          DirectionalLight swiatlo_kier = new DirectionalLight(kolor_swiatla_kier, kierunek_swiatla_kier1);
          DirectionalLight swiatlo_kier1 = new DirectionalLight(kolor_swiatla_kier, kierunek_swiatla_kier);
          PointLight swiatlo_pnkt = new PointLight(kolor_swiatla_pnkt, new Point3f(2.5f,1.f,1.5f), new Point3f(0.1f,0.1f,.1f));
-         SpotLight swiatlo_sto = new SpotLight(kolor_swiatla_sto, new Point3f(5f, 2f, 0f), new Point3f(0.01f,0.01f,0.01f), new Vector3f(0f, 0f, .0f),1.59f, 1);
+         SpotLight swiatlo_sto = new SpotLight(kolor_swiatla_sto, new Point3f(5f, 2f, 0f), new Point3f(0.05f,0.05f,0.05f), new Vector3f(-0.5f, -0.2f, .0f),1.59f, 1);
+         SpotLight swiatlo_sto1 = new SpotLight(kolor_swiatla_sto, new Point3f(-5f, 2f, 1f), new Point3f(0.05f,0.05f,0.05f), new Vector3f(0.5f, -0.2f, -.1f),1.59f, 1);
       
          swiatlo_tla.setInfluencingBounds(bounds);
          swiatlo_kier.setInfluencingBounds(bounds);
+         swiatlo_sto.setInfluencingBounds(bounds);
+         swiatlo_sto1.setInfluencingBounds(bounds);
          
          wezel_scena.addChild(swiatlo_tla);
        wezel_scena.addChild(swiatlo_kier);
-       wezel_2.addChild(swiatlo_kier1);
-       wezel_2.addChild(swiatlo_tla1);
+       wezel_scena.addChild(swiatlo_kier1);
+       wezel_scena.addChild(swiatlo_tla1);
        obrot_animacja2.addChild(swiatlo_pnkt);
-       wezel_3.addChild(swiatlo_sto);
+       wezel_scena.addChild(swiatlo_sto);
+       wezel_scena.addChild(swiatlo_sto1);
        
       //----------------------------------------------
       Transform3D  p_podstawy   = new Transform3D();
@@ -306,7 +399,7 @@ public class Maffek extends Applet implements KeyListener{
           ObjectFile f=new ObjectFile();
           f.setFlags(ObjectFile.RESIZE| ObjectFile.TRIANGULATE|ObjectFile.STRIPIFY);
           if(true){
-              s=f.load("1.obj");
+              s=f.load("1v3.obj");
               transformacja_c.addChild(s.getSceneGroup());
           }
       
@@ -330,7 +423,6 @@ public class Maffek extends Applet implements KeyListener{
       wezel_scena.addChild(transformacja_c);
       
      //---------------------------------------------
-     // ColorCube pierwsze = new ColorCube(0.15f);
       Transform3D  p_pierwsze   = new Transform3D();
       p_pierwsze.set(new Vector3f(-0.015f,-0.22f,0.015f));
       p_pierwsze.setScale(0.16);
@@ -343,7 +435,7 @@ public class Maffek extends Applet implements KeyListener{
           ObjectFile f=new ObjectFile();
           f.setFlags(ObjectFile.RESIZE| ObjectFile.TRIANGULATE|ObjectFile.STRIPIFY);
           if(true){
-              s=f.load("2.obj");
+              s=f.load("2v8.obj");
               transformacja_1.addChild(s.getSceneGroup());
           }
       
@@ -369,7 +461,6 @@ public class Maffek extends Applet implements KeyListener{
       obrot_animacja.addChild(wezel_3);
       
        //---------------------------------------------
-     // ColorCube drugie = new ColorCube(0.1f);
       Transform3D  p_drugie   = new Transform3D();
       p_drugie.set(new Vector3f(+0.025f,0.04f,0.016f));
       p_drugie.setScale(0.3);
@@ -385,7 +476,7 @@ public class Maffek extends Applet implements KeyListener{
           ObjectFile f=new ObjectFile();
           f.setFlags(ObjectFile.RESIZE| ObjectFile.TRIANGULATE|ObjectFile.STRIPIFY);
           if(true){
-              s=f.load("3.obj");
+              s=f.load("3final.obj");
               transformacja_2.addChild(s.getSceneGroup());
           }
       
@@ -411,7 +502,6 @@ public class Maffek extends Applet implements KeyListener{
       obrot_animacja2.addChild(wezel_4);
       
         //---------------------------------------------
-   //   ColorCube trzecie = new ColorCube(0.1f);
       Transform3D  p_trzecie   = new Transform3D();
       p_trzecie.set(new Vector3f(0.195f,0.325f,0.017f));
       p_trzecie.setScale(0.28);
@@ -430,7 +520,7 @@ public class Maffek extends Applet implements KeyListener{
           ObjectFile f=new ObjectFile();
           f.setFlags(ObjectFile.RESIZE| ObjectFile.TRIANGULATE|ObjectFile.STRIPIFY);
           if(true){
-              s=f.load("4.obj");
+              s=f.load("4v6.obj");
               transformacja_3.addChild(s.getSceneGroup());
           }
       
@@ -456,7 +546,6 @@ public class Maffek extends Applet implements KeyListener{
       obrot_animacja3.addChild(wezel_5);
       
        //---------------------------------------------
-    //  ColorCube czwarte = new ColorCube(0.1f);
       Transform3D  p_czwarte   = new Transform3D();
       p_czwarte.set(new Vector3f(0.66f,0.387f,0.01f));
       p_czwarte.setScale(0.19);
@@ -473,7 +562,7 @@ public class Maffek extends Applet implements KeyListener{
           ObjectFile f=new ObjectFile();
           f.setFlags(ObjectFile.RESIZE| ObjectFile.TRIANGULATE|ObjectFile.STRIPIFY);
           if(true){
-              s=f.load("5.obj");
+              s=f.load("5v2.obj");
               transformacja_4.addChild(s.getSceneGroup());
           }
       
@@ -499,7 +588,6 @@ public class Maffek extends Applet implements KeyListener{
       obrot_animacja4.addChild(wezel_6);
       
        //---------------------------------------------
-    //  ColorCube piate = new ColorCube(0.1f);
       Transform3D  p_piate   = new Transform3D();
       p_piate.set(new Vector3f(0.775f,0.35f,0.016f));
       p_piate.setScale(0.085);
@@ -514,7 +602,7 @@ public class Maffek extends Applet implements KeyListener{
           ObjectFile f=new ObjectFile();
           f.setFlags(ObjectFile.RESIZE| ObjectFile.TRIANGULATE|ObjectFile.STRIPIFY);
           if(true){
-              s=f.load("6.obj");
+              s=f.load("6v3.obj");
               transformacja_5.addChild(s.getSceneGroup());
           }
       
@@ -554,7 +642,7 @@ public class Maffek extends Applet implements KeyListener{
           ObjectFile f=new ObjectFile();
           f.setFlags(ObjectFile.RESIZE| ObjectFile.TRIANGULATE|ObjectFile.STRIPIFY);
           if(true){
-              s=f.load("7.obj");
+              s=f.load("7v2.obj");
               transformacja_51.addChild(s.getSceneGroup());
           }
       
@@ -579,7 +667,6 @@ public class Maffek extends Applet implements KeyListener{
       obrot_animacja5.addChild(transformacja_51);
       obrot_animacja5.addChild(wezel_7);
        //---------------------------------------------
-    // ColorCube szoste1 = new ColorCube(0.02f);
       Transform3D  p_szoste1   = new Transform3D();
       p_szoste1.set(new Vector3f(0.78f,0.17f,-0.025f));
       p_szoste1.setScale(0.07);
@@ -592,7 +679,7 @@ public class Maffek extends Applet implements KeyListener{
           ObjectFile f=new ObjectFile();
           f.setFlags(ObjectFile.RESIZE| ObjectFile.TRIANGULATE|ObjectFile.STRIPIFY);
           if(true){
-              s=f.load("8_1.obj");
+              s=f.load("8v2.obj");
               transformacja_61.addChild(s.getSceneGroup());
           }
       
@@ -617,7 +704,6 @@ public class Maffek extends Applet implements KeyListener{
       obrot_animacja61.addChild(transformacja_61);
       
          //---------------------------------------------
-     // ColorCube szoste2 = new ColorCube(0.02f);
       Transform3D  p_szoste2   = new Transform3D();
       p_szoste2.set(new Vector3f(0.78f,0.17f,0.055f));
       p_szoste2.setScale(0.07);
@@ -632,7 +718,7 @@ public class Maffek extends Applet implements KeyListener{
           ObjectFile f=new ObjectFile();
           f.setFlags(ObjectFile.RESIZE| ObjectFile.TRIANGULATE|ObjectFile.STRIPIFY);
           if(true){
-              s=f.load("8_1.obj");
+              s=f.load("8v2.obj");
               transformacja_62.addChild(s.getSceneGroup());
           }
       
@@ -666,19 +752,85 @@ public class Maffek extends Applet implements KeyListener{
       kulka.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
       kulka.setTransform(pos1);
       kulka.addChild(kuleczka);
-      wezel_8.addChild(kulka);
-      wezel_scena.addChild(wezel_8);
+      obrot_animacja75.addChild(kulka);
+
       
+        TextureLoader loader = new TextureLoader("sciany.jpg",null);
+        ImageComponent2D image = loader.getImage();
+        
+        Texture2D sciany = new Texture2D(Texture.BASE_LEVEL, Texture.RGBA, image.getWidth(),image.getHeight());
+        sciany.setImage(0, image);
+        sciany.setBoundaryModeS(Texture.WRAP);
+        sciany.setBoundaryModeT(Texture.WRAP);
+        
+         loader = new TextureLoader("podloga.jpg",null);
+         image = loader.getImage();
+        
+        Texture2D pod = new Texture2D(Texture.BASE_LEVEL, Texture.RGBA, image.getWidth(),image.getHeight());
+        pod.setImage(0, image);
+        pod.setBoundaryModeS(Texture.WRAP);
+        pod.setBoundaryModeT(Texture.WRAP);
+        
+        loader = new TextureLoader("sufit.jpg",null);
+         image = loader.getImage();
+        
+        Texture2D suf = new Texture2D(Texture.BASE_LEVEL, Texture.RGBA, image.getWidth(),image.getHeight());
+        suf.setImage(0, image);
+        suf.setBoundaryModeS(Texture.WRAP);
+        suf.setBoundaryModeT(Texture.WRAP);
+        
+        Appearance wyglad_scian = new Appearance();
+        wyglad_scian.setTexture(sciany);
+        
+        Appearance wyglad_pod = new Appearance();
+        wyglad_pod.setTexture(pod);
+        
+        Appearance wyglad_suf = new Appearance();
+        wyglad_suf.setTexture(suf);
+        
+        Box hala= new Box(5.5f, 2f, 0.05f,Box.GENERATE_NORMALS_INWARD|Box.GENERATE_TEXTURE_COORDS, wyglad_scian);
+        Box hala1= new Box(5.5f, 2f, 0.05f,Box.GENERATE_TEXTURE_COORDS|Box.GENERATE_NORMALS_INWARD, wyglad_scian);
+        Box hala2= new Box(0.05f, 2f, 5.5f,Box.GENERATE_TEXTURE_COORDS|Box.GENERATE_NORMALS_INWARD, wyglad_scian);
+        Box hala3= new Box(0.05f,2f, 5.5f,Box.GENERATE_TEXTURE_COORDS|Box.GENERATE_NORMALS_INWARD, wyglad_scian);
+        
+        Box podloga= new Box(5.5f, 0.05f, 5.5f,Box.GENERATE_TEXTURE_COORDS|Box.GENERATE_NORMALS_INWARD, wyglad_suf);
+        Box sufit= new Box(5.5f, 0.05f, 5.5f,Box.GENERATE_TEXTURE_COORDS|Box.GENERATE_NORMALS_INWARD, wyglad_pod);
+        
+        Transform3D p_hali = new Transform3D();
+        p_hali.set(new Vector3f(0f,1.35f,-5.50f));
+        Transform3D p_hali1 = new Transform3D();
+        p_hali1.set(new Vector3f(0f,1.35f,+5.50f));
+        Transform3D p_hali2 = new Transform3D();
+        p_hali2.set(new Vector3f(-5.50f,1.35f,0f));
+        Transform3D p_hali3 = new Transform3D();
+        p_hali3.set(new Vector3f(5.50f,1.35f,0f));
+        
+        Transform3D p_pod = new Transform3D();
+        p_pod.set(new Vector3f(0f,3f,0f));
+        
+        Transform3D p_suf = new Transform3D();
+        p_suf.set(new Vector3f(0f,-0.7f,0f));
+        
+        TransformGroup t_hali = new TransformGroup(p_hali);
+        TransformGroup t_hali1 = new TransformGroup(p_hali1);
+        TransformGroup t_hali2 = new TransformGroup(p_hali2);
+        TransformGroup t_hali3 = new TransformGroup(p_hali3);
+        TransformGroup t_pod = new TransformGroup(p_pod);
+        TransformGroup t_suf= new TransformGroup(p_suf);
+        
+       t_hali.addChild(hala);
+       t_hali1.addChild(hala1);
+       t_hali2.addChild(hala2);
+       t_hali3.addChild(hala3);
+       t_pod.addChild(podloga);
+       t_suf.addChild(sufit);
+       wezel_scena.addChild(t_hali);
+       wezel_scena.addChild(t_hali1);
+       wezel_scena.addChild(t_hali2);
+       wezel_scena.addChild(t_hali3);
+       wezel_scena.addChild(t_pod);
+       wezel_scena.addChild(t_suf);
       
-      Appearance  wygladCylindra = new Appearance();
-      wygladCylindra.setColoringAttributes(new ColoringAttributes(0.5f,0.5f,0.9f,ColoringAttributes.NICEST));
-      Cylinder podloze = new Cylinder(2f,0.01f, Cylinder.GENERATE_NORMALS|Cylinder.GENERATE_TEXTURE_COORDS, wygladCylindra);
-      TransformGroup t_podloze = new TransformGroup();
-      Transform3D polozenie_p = new Transform3D();
-      polozenie_p.set(new Vector3f(0f,-0.65f,0f));
-      t_podloze.addChild(podloze);
-      t_podloze.setTransform(polozenie_p);
-      wezel_scena.addChild(t_podloze);
       
       
      wezel_scena.addChild(wezel_2);    
@@ -697,20 +849,6 @@ public class Maffek extends Applet implements KeyListener{
 	scena.compile();
         
         panel.setBackground(Color.DARK_GRAY);  
-      /*  panel.A.addActionListener(this);
-        panel.C.addActionListener(this);
-        panel.D.addActionListener(this);
-        panel.N.addActionListener(this);
-        panel.O.addActionListener(this);
-        panel.R.addActionListener(this);
-        panel.S.addActionListener(this);
-        panel.W.addActionListener(this);
-        panel.cztery.addActionListener(this);
-        panel.dwa.addActionListener(this);
-        panel.jeden.addActionListener(this);
-        panel.piec.addActionListener(this);
-        panel.trzy.addActionListener(this);
-        panel.szesc.addActionListener(this);*/
         add("North",panel);
         BoundingSphere bounds = new BoundingSphere(new Point3d(0.0,0.0,0.0), 100.0);
 
@@ -829,7 +967,9 @@ public class Maffek extends Applet implements KeyListener{
          panel.W.setBackground(Color.RED);
          panel.S.setBackground(Color.RED);
      }
-     
+     /**
+      * Funkcja zmieniająca panel po wciśnięciu przyciski C
+      */
      public void CPressed(){
          panel.jeden.setBackground(new Color(0,153,0));
          panel.dwa.setBackground(new Color(0,153,0));
@@ -845,12 +985,16 @@ public class Maffek extends Applet implements KeyListener{
          panel.A.setBackground(Color.RED);
          panel.D.setBackground(Color.RED); 
      }
-     
+     /**
+      * Funkcja zmieniająca panel po wciśnięciu przyciski N
+      */
      public void NPressed(){
          panel.N.setBackground(Color.BLUE);
          panel.O.setBackground(new Color(0,153,0));
      }
-     
+     /**
+      * Funkcja zmieniająca panel po wciśnięciu przyciski O
+      */
      public void OPressed(){
          panel.jeden.setBackground(Color.RED);
          panel.dwa.setBackground(Color.RED);
@@ -867,7 +1011,9 @@ public class Maffek extends Applet implements KeyListener{
          panel.R.setBackground(Color.RED);
          panel.O.setBackground(Color.BLUE);
      }
-     
+     /**
+      * Funkcja zmieniająca panel po zakończeniu odtwarzania
+      */
      public void OEnd(){
          panel.jeden.setBackground(new Color(0,153,0));
          panel.dwa.setBackground(new Color(0,153,0));
@@ -880,6 +1026,10 @@ public class Maffek extends Applet implements KeyListener{
          panel.R.setBackground(new Color(0,153,0));
          panel.O.setBackground(Color.RED);
      }
+     /**
+      * 
+      * @param e Wciśnięty klawisz
+      */
     @Override
     public void keyPressed(KeyEvent e){
        if(!odtwarzanie){ 
@@ -1021,27 +1171,31 @@ public class Maffek extends Applet implements KeyListener{
              zegar.scheduleAtFixedRate(new Zadanie(),0,20);
          }
           
-         if(e.getKeyCode()== KeyEvent.VK_ENTER && !zatrzask){
+         if(e.getKeyCode()== KeyEvent.VK_Z && !zatrzask){
              chwyc=!chwyc;
              zatrzask = true;
-           /*   if(chwyc) {
-                 wezel_scena.removeChild(wezel_scena);
-                 wezel_7.addChild(wezel_8);
-                }
-             else 
-                  if(wezel_7.numChildren()==3) {
-                     wezel_7.removeChild(wezel_8);
-                     wezel_scena.addChild(wezel_8);
-             }*/
+             ap=a;
+             bp=b;
+             cp=c;
+             dp=d;
+             fp=f;
          } 
        }
     }
-    @Override
+    /**
+     * 
+     * @param e  Wyciśnięty klawisz
+     */
+    @Override 
     public void keyReleased(KeyEvent e){
         if(e.getKeyCode()== KeyEvent.VK_N) zatrzask = false;
         if(e.getKeyCode()== KeyEvent.VK_O) zatrzask = false;
-        if(e.getKeyCode()== KeyEvent.VK_ENTER) zatrzask = false;
+        if(e.getKeyCode()== KeyEvent.VK_Z) zatrzask = false;
     }
+    /**
+     * 
+     * @param e Wciśnięty klawisz
+     */
     @Override
      public void keyTyped(KeyEvent e){
     }
@@ -1052,7 +1206,7 @@ public class Maffek extends Applet implements KeyListener{
     public static void main(String[] args) {
         // TODO code application logic here
         Frame Maffi = new MainFrame(new Maffek(),1280,960);
-        Maffi.setTitle("Pachwina Project");
+        Maffi.setTitle("Renka Robota");
         Maffi.setVisible(true);
     }
     
