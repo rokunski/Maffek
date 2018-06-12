@@ -2,7 +2,15 @@
 
 
 
-Changelog
+Changelog:
+
+v0.7
+- dodano możliwość chwycenia kulki za pomocą przycisku Z (ruch kulki w fazie testów)
+- dodano pomieszczenie w któwym znajduje się robot
+- zmienione tekstury robota
+- optymalizacja programu (zmiejszenie wagi wczytywanych .obj)
+- drobna modyfikacja świateł
+- dodano javadoc (nie wszystkie)
 
 v0.41
 - usunięto możliwość sterowania za pomocą przycisków znajdujących się na panelu nad robotem
