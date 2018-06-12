@@ -7,7 +7,7 @@ package maffek;
 
 /**
  *
- * @author rokun
+ * @author Maffek, Rokuński, Ksulek
  */
 public class Klawisze extends javax.swing.JPanel {
 
@@ -47,6 +47,8 @@ public class Klawisze extends javax.swing.JPanel {
         O_opis = new javax.swing.JLabel();
         robot_opis = new javax.swing.JLabel();
         WSAD_opis = new javax.swing.JLabel();
+        Z_opis = new javax.swing.JLabel();
+        Z = new javax.swing.JButton();
 
         setForeground(java.awt.Color.white);
 
@@ -180,6 +182,17 @@ public class Klawisze extends javax.swing.JPanel {
         WSAD_opis.setForeground(java.awt.Color.white);
         WSAD_opis.setText("Klawisze sterujace:");
 
+        Z_opis.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
+        Z_opis.setForeground(java.awt.Color.white);
+        Z_opis.setText("Złapanie kulki");
+
+        Z.setBackground(new java.awt.Color(255, 0, 0));
+        Z.setFont(new java.awt.Font("Impact", 0, 20)); // NOI18N
+        Z.setForeground(java.awt.Color.white);
+        Z.setText("Z");
+        Z.setEnabled(false);
+        Z.setPreferredSize(new java.awt.Dimension(50, 50));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -230,11 +243,15 @@ public class Klawisze extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(O_opis)
-                            .addComponent(N_opis)))
+                            .addComponent(N_opis))
+                        .addGap(14, 14, 14)
+                        .addComponent(Z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Z_opis))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(26, 26, 26)
                         .addComponent(WSAD_opis)))
-                .addContainerGap(429, Short.MAX_VALUE))
+                .addContainerGap(276, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -259,11 +276,15 @@ public class Klawisze extends javax.swing.JPanel {
                                     .addComponent(S, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(D, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(R, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(N, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(R_opis)
-                                    .addComponent(N_opis))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(Z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(Z_opis))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(R, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(N, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(R_opis)
+                                        .addComponent(N_opis)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(C, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -293,6 +314,8 @@ public class Klawisze extends javax.swing.JPanel {
     public javax.swing.JButton S;
     public javax.swing.JButton W;
     private javax.swing.JLabel WSAD_opis;
+    public javax.swing.JButton Z;
+    public javax.swing.JLabel Z_opis;
     public javax.swing.JButton cztery;
     public javax.swing.JButton dwa;
     public javax.swing.JButton jeden;
