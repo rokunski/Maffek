@@ -926,7 +926,7 @@ public class Maffek extends Applet implements KeyListener {
         simpleU.addBranchGraph(scena);
     }
     /**
-     * Funkcja zmieniająca panel po wciśnięciu przyciski 1
+     * Funkcja zmieniająca panel po wciśnięciu przycisku 1
      */
     private void jedenPressed() {
         panel.jeden.setBackground(Color.BLUE);
@@ -943,7 +943,7 @@ public class Maffek extends Applet implements KeyListener {
     }
     
     /**
-     * Funkcja zmieniająca panel po wciśnięciu przyciski 2
+     * Funkcja zmieniająca panel po wciśnięciu przycisku 2
      */
 
     private void dwaPressed() {
@@ -960,7 +960,7 @@ public class Maffek extends Applet implements KeyListener {
         panel.D.setBackground(Color.RED);
     }
       /**
-     * Funkcja zmieniająca panel po wciśnięciu przyciski 3
+     * Funkcja zmieniająca panel po wciśnięciu przycisku 3
      */
 
     private void trzyPressed() {
@@ -978,7 +978,7 @@ public class Maffek extends Applet implements KeyListener {
     }
     
       /**
-     * Funkcja zmieniająca panel po wciśnięciu przyciski 4
+     * Funkcja zmieniająca panel po wciśnięciu przycisku 4
      */
 
     private void czteryPressed() {
@@ -996,7 +996,7 @@ public class Maffek extends Applet implements KeyListener {
     }
     
       /**
-     * Funkcja zmieniająca panel po wciśnięciu przyciski 5
+     * Funkcja zmieniająca panel po wciśnięciu przycisku 5
      */
     private void piecPressed() {
         panel.piec.setBackground(Color.BLUE);
@@ -1013,7 +1013,7 @@ public class Maffek extends Applet implements KeyListener {
     }
     
       /**
-     * Funkcja zmieniająca panel po wciśnięciu przyciski 6
+     * Funkcja zmieniająca panel po wciśnięciu przycisku 6
      */
 
     private void szescPressed() {
@@ -1031,7 +1031,7 @@ public class Maffek extends Applet implements KeyListener {
     }
 
     /**
-     * Funkcja zmieniająca panel po wciśnięciu przyciski C
+     * Funkcja zmieniająca panel po wciśnięciu przycisku C
      */
     private void CPressed() {
         panel.jeden.setBackground(new Color(0, 153, 0));
@@ -1050,7 +1050,7 @@ public class Maffek extends Applet implements KeyListener {
     }
 
     /**
-     * Funkcja zmieniająca panel po wciśnięciu przyciski N
+     * Funkcja zmieniająca panel po wciśnięciu przycisku N
      */
     private void NPressed() {
         panel.N.setBackground(Color.BLUE);
@@ -1058,7 +1058,7 @@ public class Maffek extends Applet implements KeyListener {
     }
 
     /**
-     * Funkcja zmieniająca panel po wciśnięciu przyciski O
+     * Funkcja zmieniająca panel po wciśnięciu przycisku O
      */
     private void OPressed() {
         panel.jeden.setBackground(Color.RED);
@@ -1077,7 +1077,7 @@ public class Maffek extends Applet implements KeyListener {
         panel.O.setBackground(Color.BLUE);
     }
     /**
-     * Funkcja zmieniająca panel po wciśnięciu przyciski Z
+     * Funkcja zmieniająca panel po wciśnięciu przycisku Z
      */
     private void ZPressed() {
         if (chwyc) {
@@ -1087,6 +1087,12 @@ public class Maffek extends Applet implements KeyListener {
             panel.Z.setBackground(new Color(0, 153, 0));
             panel.Z_opis.setText("Zlapanie kulki");
         }
+    }
+    /**
+     * Funkcja zmieniająca panel po wciśnięciu przycisku M
+     */
+    private void MPressed() {
+       panel.M.setBackground(Color.BLUE);
     }
 
     /**
@@ -1281,6 +1287,7 @@ public class Maffek extends Applet implements KeyListener {
             
             if (e.getKeyCode() == KeyEvent.VK_M) {
                 graj();
+                MPressed();
             }
 
             if (e.getKeyCode() == KeyEvent.VK_C) {
