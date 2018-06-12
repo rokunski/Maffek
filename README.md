@@ -4,6 +4,13 @@
 
 Changelog:
 
+v0.8
+- dodano kolizję do kuleczki (działa tylko do pierwszego złapania)
+- dodano chwytanie kuleczki do nagrywania i odtwarzania ruchów (w jednym przypadku jest błąd)
+- uaktualniono górny panel
+- dodano komentarze i uaktualniono Javadoc
+
+
 v0.7
 - dodano możliwość chwycenia kulki za pomocą przycisku Z (ruch kulki w fazie testów)
 - dodano pomieszczenie w któwym znajduje się robot
